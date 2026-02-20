@@ -1,1100 +1,2377 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>REWIND | SYSTÈME DÉGRADÉ_v5.0.corrupt</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@300;500&family=VT323&family=Inter:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@300;500&family=VT323&family=Inter:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+
     <style>
+
         :root {
+
             --accent: #39ff14;
+
             --accent-dim: #054d00;
+
             --bg: #030405;
+
             --surface: #0a0c10;
+
             --vhs-red: #8b0000;
+
             --vhs-blue: #1e3a8a;
+
             --glitch-red: rgba(255, 0, 80, 0.7);
+
             --glitch-blue: rgba(0, 255, 255, 0.7);
+
             --grime: rgba(0, 0, 0, 0.4);
+
             --paper: #f2f2f2;
+
             --folder-tan: #d2b48c; 
+
             --folder-tan-dark: #b89b72;
+
             /* Couleurs personnages */
+
             --color-nathan: #e11d48;
+
             --color-laura: #16a34a;
+
             --color-sofiane: #2563eb;
+
             --color-eva: #9333ea;
+
             --color-hugo: #ea580c;
+
         }
+
+
 
         body {
+
             background-color: var(--bg);
+
             color: #b0b8c1;
+
             font-family: 'Courier Prime', serif;
+
             overflow-x: hidden;
+
             background-image: url('https://www.transparenttextures.com/patterns/stardust.png'), radial-gradient(circle at 50% 50%, #0d1117 0%, #030405 100%);
+
         }
+
         
+
         body.locked { overflow: hidden; height: 100vh; }
 
+
+
         /* --- EFFET CENSURE --- */
+
         .censored {
+
             background: #111;
+
             color: #111;
+
             padding: 0 4px;
+
             user-select: none;
+
             cursor: help;
+
             border-radius: 2px;
-            word-break: break-all;
+            
+            /* Modifications ici pour empêcher la coupure des mots */
+            word-break: normal;
+            overflow-wrap: break-word;
+            -webkit-box-decoration-break: clone;
+            box-decoration-break: clone;
+
             display: inline;
+
             transition: background 1.5s ease, color 1.5s ease;
+
         }
+
         .censored.revealed {
+
             background: transparent !important;
+
             color: inherit !important;
+
             user-select: auto;
+
             cursor: default;
+
         }
+
+
 
         /* --- NOTIFICATION SYSTÈME --- */
+
         #sys-notification {
+
             position: fixed;
+
             top: -150px;
+
             left: 50%;
+
             transform: translateX(-50%);
+
             z-index: 20000;
+
             background: #000;
+
             border: 2px solid var(--accent);
+
             padding: 20px 50px;
+
             color: var(--accent);
-            font-family: 'VT323', monospace;
+
+            font-family: 'Anton', sans-serif;
+
             text-transform: uppercase;
+
             letter-spacing: 3px;
+
             box-shadow: 0 0 40px rgba(57, 255, 20, 0.3);
+
             transition: top 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
             display: flex;
+
             align-items: center; gap: 20px; pointer-events: none;
+
         }
+
         #sys-notification.active { top: 30px; }
+
         #sys-notification.alert { border-color: #ff0000; color: #ff0000; box-shadow: 0 0 40px rgba(255, 0, 0, 0.4); }
 
+
+
         /* --- BOOT SEQUENCE & WARNING --- */
+
         #boot-screen {
+
             position: fixed; inset: 0; z-index: 50000;
+
             background: #000;
+
             padding: 2rem;
-            font-family: 'VT323', monospace;
+
+            font-family: 'Courier Prime', monospace;
+
             color: var(--accent);
+
             font-size: 1.2rem;
+
             overflow: hidden;
+
             display: flex;
+
             flex-direction: column;
+
             justify-content: flex-end;
+
             cursor: wait;
+
         }
+
         .log-line { opacity: 0; animation: fadeInfo 0.1s forwards; margin-bottom: 2px; }
+
         .log-error { color: #ff0000; font-weight: bold; }
+
         @keyframes fadeInfo { from { opacity: 0; } to { opacity: 1; } }
 
+
+
         #warning-screen {
+
             position: fixed; inset: 0; z-index: 49999;
+
             background: rgba(0,0,0,0.95);
+
             backdrop-filter: blur(10px);
+
             display: none;
+
             align-items: center; justify-content: center;
+
             flex-direction: column;
+
             text-align: center;
+
             padding: 2rem;
+
         }
+
         .warning-box {
+
             border: 2px solid #ff0000;
+
             padding: 3rem;
+
             max-width: 600px;
+
             background: #050000;
+
             box-shadow: 0 0 50px rgba(255, 0, 0, 0.2);
+
             animation: pulse-border 2s infinite;
+
         }
+
         @keyframes pulse-border { 0%, 100% { box-shadow: 0 0 50px rgba(255, 0, 0, 0.2); } 50% { box-shadow: 0 0 80px rgba(255, 0, 0, 0.5); } }
 
+
+
         /* --- EFFETS GLITCH CHIFFRES --- */
+
         .glitch-digit { display: inline-block; transition: 0.3s; }
+
         .glitch-digit.active { 
+
             color: #ff0000 !important; 
+
             font-weight: 900; 
+
             animation: digit-glitch 0.15s infinite; 
+
             text-shadow: 2px 0 #00ffff, -2px 0 #ff00ff; 
+
         }
+
         @keyframes digit-glitch { 
+
             0% { transform: translate(0); } 
+
             20% { transform: translate(-2px, 1px); } 
+
             40% { transform: translate(-2px, -1px); } 
+
             60% { transform: translate(2px, 1px); } 
+
             80% { transform: translate(2px, -1px); } 
+
         }
+
+
 
         /* --- TRESSAUTEMENT GLOBAL (PAGE SHAKE) --- */
+
         @keyframes page-shake {
+
             0% { transform: translate(0, 0) rotate(0deg); }
+
             10% { transform: translate(-3px, 1px) rotate(-0.5deg); filter: contrast(1.2) hue-rotate(5deg); }
+
             20% { transform: translate(3px, -1px) rotate(0.5deg); }
+
             30% { transform: translate(-3px, 2px); filter: invert(0.1); }
+
             40% { transform: translate(3px, -2px); }
+
             50% { transform: translate(-2px, 0); }
+
             60% { transform: translate(2px, 0); filter: hue-rotate(-5deg); }
+
             70% { transform: translate(0, 3px); }
+
             80% { transform: translate(0, -3px); }
+
             90% { transform: translate(-1px, 1px); }
+
             100% { transform: translate(0, 0) rotate(0deg); filter: none; }
+
         }
+
         .page-glitch { animation: page-shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
 
+
+
         /* --- STRUCTURE VUES --- */
+
         .view { display: none; }
+
         .view.active { display: block; animation: fadeIn 0.4s ease-out; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
 
-        .glass { background: rgba(10, 12, 16, 0.85); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.03); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
-        .terminal { font-family: 'VT323', monospace; }
 
-        /* --- LOGO --- */
-        .logo-heavy-glitch { position: relative; color: #fff; font-size: 3.5rem; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; text-shadow: 0 0 15px rgba(57, 255, 20, 0.4); z-index: 10; cursor: pointer; }
-        .logo-heavy-glitch::before { content: "REWIND"; position: absolute; top: 0; left: 0; width: 100%; height: 100%; color: var(--glitch-red); z-index: -1; opacity: 0; animation: natural-glitch 6s infinite; }
-        @keyframes natural-glitch { 0%, 92%, 100% { transform: translate(0); opacity: 0; } 93% { transform: translate(-4px, 2px); opacity: 0.8; } 95% { transform: translate(4px, -2px); opacity: 0.8; } }
+
+        .glass { background: rgba(10, 12, 16, 0.85); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.03); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+
+        .terminal { font-family: 'Anton', sans-serif; }
+
+
+
+        /* --- LOGO NOUVEAU STYLE (ANTON + TRIANGLES) --- */
+
+        .logo-heavy-glitch { 
+
+            position: relative; 
+
+            color: #d1d5db; /* Gris clair */
+
+            font-family: 'Anton', sans-serif;
+
+            font-size: clamp(1.8rem, 6vw, 3.5rem); /* Rendu responsive */
+
+            font-weight: 400; 
+
+            letter-spacing: 0.05em; 
+
+            text-transform: uppercase; 
+
+            text-shadow: 2px 0 0 rgba(139,0,0,0.8), -2px 0 0 rgba(5,77,0,0.8); /* Effet 3D Rouge/Vert */
+
+            z-index: 10; 
+
+            cursor: pointer; 
+
+            display: inline-block;
+
+            animation: main-logo-glitch 4s infinite;
+
+        }
+
+        
+
+        @keyframes main-logo-glitch { 
+
+            0%, 75%, 100% { transform: translate(0) skew(0deg); text-shadow: 2px 0 0 rgba(139,0,0,0.8), -2px 0 0 rgba(5,77,0,0.8); filter: none; } 
+
+            76% { transform: translate(-2px, 1px) skew(-2deg); text-shadow: 4px 0 0 rgba(255,0,0,0.9), -4px 0 0 rgba(0,255,0,0.9); } 
+
+            78% { transform: translate(3px, -1px) skew(3deg); text-shadow: -3px 0 0 rgba(255,0,0,0.9), 3px 0 0 rgba(0,255,0,0.9); filter: contrast(120%); } 
+
+            80% { transform: translate(0) skew(0deg); text-shadow: 2px 0 0 rgba(139,0,0,0.8), -2px 0 0 rgba(5,77,0,0.8); filter: none; }
+
+            92% { transform: translate(-1px, 2px); text-shadow: 1px 2px 0 rgba(139,0,0,0.8), -1px -2px 0 rgba(5,77,0,0.8); }
+
+            94% { transform: translate(0) skew(0deg); text-shadow: 2px 0 0 rgba(139,0,0,0.8), -2px 0 0 rgba(5,77,0,0.8); }
+
+        }
+
+
+
+        .rewind-logo-w { position: relative; display: inline-block; }
+
+        .rewind-logo-triangles {
+
+            position: absolute;
+
+            top: 52%;
+
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            color: #c81e1e; /* Rouge triangles */
+
+            width: 1.1em;
+
+            height: 1.1em;
+
+            z-index: 10;
+
+            pointer-events: none;
+
+            filter: drop-shadow(1px 1px 0px rgba(0,0,0,0.6));
+
+            animation: tri-glitch 4s infinite;
+
+        }
+
+
+
+        @keyframes tri-glitch {
+
+            0%, 75%, 100% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(1px 1px 0px rgba(0,0,0,0.6)); }
+
+            76% { transform: translate(-52%, -48%) scale(1.05); filter: drop-shadow(-3px 0 0 rgba(0,255,255,0.7)); }
+
+            78% { transform: translate(-48%, -52%) scale(0.95); filter: drop-shadow(3px 0 0 rgba(255,0,255,0.7)); }
+
+            80% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(1px 1px 0px rgba(0,0,0,0.6)); }
+
+            92% { transform: translate(-49%, -49%); filter: drop-shadow(0px 2px 0 rgba(255,255,0,0.7)); }
+
+            94% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(1px 1px 0px rgba(0,0,0,0.6)); }
+
+        }
+
+
 
         /* --- NAVIGATION --- */
+
         .nav-link { 
+
             position: relative; 
+
             transition: 0.3s; 
+
             color: #ffffff; /* BLANC PAR DÉFAUT */
+
             padding: 0.5rem 0; 
+
             cursor: pointer; 
+
             text-transform: uppercase; 
+
             font-weight: bold; 
+
             letter-spacing: 0.2em; 
+
             font-size: 13px; 
+
         }
+
         .nav-link:hover, .nav-link.active { 
+
             color: var(--accent); /* VERT AU SURVOL ET ACTIF */
+
             text-shadow: 0 0 15px var(--accent); 
+
         }
+
+
 
         /* --- BOUTONS --- */
+
         .btn-action { background: #0a0c10; color: var(--accent); border: 1px solid var(--accent); padding: 0.75rem 1.5rem; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; clip-path: polygon(2px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 2px); cursor: pointer; }
+
         .btn-action:hover { background: var(--accent); color: #000; box-shadow: 0 0 30px var(--accent); }
 
+
+
         /* --- POLAROID ACCUEIL --- */
+
         .polaroid-evidence { background: #e2e8f0; padding: 12px 12px 50px 12px; box-shadow: 10px 15px 40px rgba(0,0,0,0.9); transform: rotate(4deg); position: relative; width: 300px; z-index: 50; transition: 0.3s; border-radius: 2px; }
+
         .polaroid-evidence:hover { transform: rotate(0deg) scale(1.05); z-index: 100; }
+
         .polaroid-img-container { background: #020202; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; position: relative; border: 1px solid rgba(0,0,0,0.3); overflow: hidden; }
-        .identifie-stamp { border: 4px double #8b0000; color: #8b0000; padding: 5px 12px; font-weight: 900; text-transform: uppercase; transform: rotate(-15deg); opacity: 0.7; position: absolute; bottom: 10px; right: 10px; font-family: 'VT323'; font-size: 1.4rem; pointer-events: none; }
+
+        .identifie-stamp { border: 4px double #8b0000; color: #8b0000; padding: 5px 12px; font-weight: 900; text-transform: uppercase; transform: rotate(-15deg); opacity: 0.7; position: absolute; bottom: 10px; right: 10px; font-family: 'Anton', sans-serif; font-size: 1.4rem; pointer-events: none; }
+
         .tape-effect { position: absolute; width: 80px; height: 30px; background: rgba(255, 255, 255, 0.15); top: -15px; left: 50%; transform: translateX(-50%) rotate(-2deg); backdrop-filter: blur(1px); z-index: 60; pointer-events: none; }
 
+
+
         /* --- VICTIMES (CHEMISES RÉALISTES) --- */
+
         .victimes-pile { perspective: 2000px; padding: 120px 0 600px 0; display: flex; flex-direction: column; align-items: center; }
+
         .victim-folder { width: 100%; max-width: 850px; margin-bottom: -430px; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; transform: rotate(var(--folder-rot)) translateX(var(--folder-x)); z-index: 1; }
+
         .victim-folder:hover { transform: rotate(0deg) translateY(-30px); }
+
         .victim-folder.active { z-index: 500; transform: rotate(0deg) translateY(0); margin-bottom: 60px; margin-top: 60px; }
+
         .folder-front { background: var(--folder-tan); background-image: url('https://www.transparenttextures.com/patterns/cardboard.png'); color: #332b1d; height: 480px; cursor: pointer; border-radius: 4px; box-shadow: 0 10px 40px rgba(0,0,0,0.7); position: relative; padding: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+
         .folder-tab { position: absolute; top: -32px; right: 80px; width: 320px; height: 35px; background: var(--folder-tan); background-image: url('https://www.transparenttextures.com/patterns/cardboard.png'); border-radius: 10px 10px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); padding: 5px 15px; display: flex; gap: 20px; font-family: 'Courier Prime', monospace; font-size: 0.7rem; font-weight: bold; color: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); border-bottom: none; }
+
         .tab-field { border-bottom: 1px solid rgba(0,0,0,0.3); flex-grow: 1; display: flex; align-items: baseline; }
+
         .tab-field span { color: #1e3a8a; font-family: 'Permanent Marker'; font-size: 0.9rem; margin-left: 8px; opacity: 0.9; }
-        .folder-name { font-family: 'VT323'; font-size: 3.5rem; font-weight: 900; text-transform: uppercase; border-bottom: 4px solid rgba(0,0,0,0.1); display: inline-block; margin-bottom: 15px; }
+
+        .folder-name { font-family: 'Anton', sans-serif; font-size: 3.5rem; font-weight: 900; text-transform: uppercase; border-bottom: 4px solid rgba(0,0,0,0.1); display: inline-block; margin-bottom: 15px; }
+
         .folder-sub { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 6px; opacity: 0.4; font-weight: 800; }
+
         .folder-content { max-height: 0; overflow: hidden; transition: max-height 0.8s ease-in-out; background: var(--folder-tan-dark); background-image: url('https://www.transparenttextures.com/patterns/cardboard.png'); box-shadow: inset 0 20px 50px rgba(0,0,0,0.5); border-radius: 0 0 10px 10px; }
+
         .victim-folder.active .folder-content { max-height: 2500px; }
+
         .victim-folder.active .folder-front { background: var(--folder-tan-dark); height: 140px; border-radius: 4px 4px 0 0; box-shadow: none; }
+
         
+
         /* STYLE SPÉCIFIQUE POUR LE DOSSIER INCONNU */
+
         #folder-inconnu .folder-front { background-color: #0d0d0d; background-image: url('https://www.transparenttextures.com/patterns/asfalt-dark.png'); color: #666; border: 1px solid #222; box-shadow: 0 20px 60px rgba(0,0,0,0.9); }
+
         #folder-inconnu .folder-tab { background-color: #050505; background-image: url('https://www.transparenttextures.com/patterns/asfalt-dark.png'); border-color: #222; color: #444; }
+
         #folder-inconnu .folder-name { color: #8b0000; text-shadow: 0 0 10px rgba(139, 0, 0, 0.4); letter-spacing: 0.2em; }
-        #folder-inconnu .tab-field span { color: #8b0000; font-family: 'VT323'; }
+
+        #folder-inconnu .tab-field span { color: #8b0000; font-family: 'Anton', sans-serif; }
+
+
 
         .victim-file-sheet { margin: 40px auto; width: 92%; background-color: var(--paper); background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png'), linear-gradient(to bottom, transparent 95%, rgba(0,0,0,0.03) 95%); background-size: 100% 100%, 100% 25px; padding: 60px; color: #1a1a1a; box-shadow: 2px 10px 35px rgba(0,0,0,0.5); transform: rotate(-1.2deg); position: relative; }
+
         .staple { position: absolute; width: 35px; height: 9px; background: #888; top: 45px; left: 65px; transform: rotate(-30deg); box-shadow: 1px 1px 3px rgba(0,0,0,0.4); z-index: 100; }
+
         .id-photo { width: 170px; height: 210px; background: #000; border: 10px solid #fff; box-shadow: 5px 8px 20px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; filter: grayscale(100%) contrast(1.1) sepia(0.2); transform: rotate(4deg); position: relative; }
-        .status-tag { background: #8b0000; color: #fff; padding: 10px 25px; font-weight: 900; text-transform: uppercase; font-size: 1rem; transform: rotate(-5deg) translateY(-20px); font-family: 'VT323'; display: inline-block; box-shadow: 3px 5px 10px rgba(0,0,0,0.4); }
+
+        .status-tag { background: #8b0000; color: #fff; padding: 10px 25px; font-weight: 900; text-transform: uppercase; font-size: 1rem; transform: rotate(-5deg) translateY(-20px); font-family: 'Anton', sans-serif; display: inline-block; box-shadow: 3px 5px 10px rgba(0,0,0,0.4); }
+
         .handwritten { font-family: 'Permanent Marker', cursive; color: #1e3a8a; font-style: italic; border-left: 4px solid rgba(30, 58, 138, 0.2); padding-left: 20px; margin-top: 15px; font-size: 1.25rem; line-height: 1.5; }
+
         .report-label { font-weight: 900; text-transform: uppercase; font-size: 0.8rem; color: #666; display: block; margin-bottom: 8px; }
+
         .report-section { border-bottom: 1px solid rgba(0,0,0,0.15); padding-bottom: 25px; margin-bottom: 25px; }
 
+
+
         /* --- CASSETTES VHS RÉALISTES --- */
+
         .vhs-cassette { position: relative; width: 100%; aspect-ratio: 1.6 / 1; background: #1a1a24; border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 2px 3px rgba(255,255,255,0.1); cursor: pointer; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 4px solid #111; }
+
         .vhs-cassette:hover { transform: scale(1.05) translateY(-10px) rotateX(5deg); z-index: 10; }
+
         .vhs-ribbed { position: absolute; bottom: 0; left: 0; right: 0; height: 75%; background-image: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0,0,0,0.3) 4px, rgba(0,0,0,0.3) 6px); pointer-events: none; }
+
         .vhs-window-unit { position: absolute; top: 22%; width: 26%; height: 40%; background: #000; border: 4px solid #222; border-radius: 4px; box-shadow: inset 0 8px 15px #000; overflow: hidden; }
+
         .win-left { left: 6%; } .win-right { right: 6%; }
+
         .vhs-reel { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background: radial-gradient(circle, #3d2616 0%, #1a0f07 60%, transparent 75%); border-radius: 50%; }
+
         .vhs-hub { width: 22px; height: 22px; background: #ddd; border-radius: 50%; border: 3px dashed #999; }
+
         .vhs-label-plate { position: absolute; top: 18%; left: 34%; width: 32%; height: 50%; background: #fff; border-radius: 2px; box-shadow: 1px 3px 6px rgba(0,0,0,0.5); background-image: linear-gradient(to bottom, var(--char-color) 0%, var(--char-color) 25%, transparent 25%), repeating-linear-gradient(to bottom, transparent, transparent 18px, #eee 18px, #eee 20px); display: flex; align-items: center; justify-content: center; padding-top: 15px; }
+
         .vhs-label-text { font-family: 'Permanent Marker', cursive; color: #111; font-size: 1.4rem; transform: rotate(-1deg); }
+
         .vhs-play-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; z-index: 50; }
+
         .vhs-cassette:hover .vhs-play-overlay { opacity: 1; }
 
+
+
         /* Style spécifique pour la cassette 000 endommagée */
+
         .vhs-cassette.damaged { background: #2a201c; border-color: #5d4037; filter: contrast(1.1) sepia(0.4); }
+
         .vhs-cassette.damaged .vhs-label-plate { background-color: #dcd0c0; background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); transform: rotate(1deg); }
+
         .vhs-cassette.damaged .vhs-label-text { color: #8b0000; font-size: 1.8rem; }
+
         .vhs-grime { position: absolute; inset: 0; background-image: url('https://www.transparenttextures.com/patterns/dust.png'); opacity: 0.4; pointer-events: none; mix-blend-mode: overlay; }
 
+
+
         /* --- BOUTIQUE SAISIES --- */
+
         .evidence-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); padding: 25px; position: relative; transition: 0.3s; display: flex; flex-direction: column; gap: 20px; cursor: pointer; }
+
         .evidence-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.8); }
-        .evidence-tag { background: #fff; color: #000; font-family: 'VT323'; font-size: 0.9rem; padding: 4px 12px; position: absolute; top: 15px; left: 15px; z-index: 10; border: 1px solid #000; box-shadow: 3px 3px 0 #8b0000; font-weight: bold; }
+
+        .evidence-tag { background: #fff; color: #000; font-family: 'Anton', sans-serif; font-size: 0.9rem; padding: 4px 12px; position: absolute; top: 15px; left: 15px; z-index: 10; border: 1px solid #000; box-shadow: 3px 3px 0 #8b0000; font-weight: bold; }
+
         .item-preview { background: #050505; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; border-radius: 4px; border: 1px solid rgba(255,255,255,0.02); font-size: 5rem; grayscale: 1; opacity: 0.5; transition: 0.4s; box-shadow: inset 0 0 30px #000; }
+
         .evidence-card:hover .item-preview { grayscale: 0; opacity: 1; }
+
         .item-info { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem; }
-        .item-title { font-family: 'VT323'; font-size: 1.8rem; color: #fff; text-transform: uppercase; line-height: 1; }
+
+        .item-title { font-family: 'Anton', sans-serif; font-size: 1.8rem; color: #fff; text-transform: uppercase; line-height: 1; }
+
         .item-price { color: var(--accent); font-weight: bold; font-family: 'JetBrains Mono'; font-size: 1.1rem; }
 
+
+
         /* --- OVERLAY FICHE --- */
+
         #item-detail-view { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); padding: 20px; cursor: pointer; }
+
         .detail-sheet { max-width: 900px; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); border: 1px solid rgba(255,255,255,0.1); cursor: default; }
+
         .detail-visual { background: #020202; display: flex; align-items: center; justify-content: center; font-size: 10rem; position: relative; }
+
         .detail-content { background: #d4d4d4; padding: 40px; color: #111; position: relative; overflow-y: auto; max-height: 80vh; }
-        .detail-ref { font-family: 'VT323'; font-size: 1.2rem; color: #8b0000; font-weight: 900; }
-        .detail-title { font-family: 'VT323'; font-size: 2.5rem; line-height: 1; text-transform: uppercase; font-weight: 900; border-bottom: 2px solid #111; padding-bottom: 10px; margin-bottom: 20px; }
+
+        .detail-ref { font-family: 'Anton', sans-serif; font-size: 1.2rem; color: #8b0000; font-weight: 900; }
+
+        .detail-title { font-family: 'Anton', sans-serif; font-size: 2.5rem; line-height: 1; text-transform: uppercase; font-weight: 900; border-bottom: 2px solid #111; padding-bottom: 10px; margin-bottom: 20px; }
+
         .detail-desc { font-family: 'Courier Prime'; line-height: 1.6; font-size: 0.95rem; }
 
+
+
         /* --- PLAYER STREAMING --- */
+
         #video-player-view { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 9999; display: none; align-items: center; justify-content: center; cursor: default; backdrop-filter: blur(15px); }
+
         .streaming-player { width: 90vw; max-width: 1000px; aspect-ratio: 16/9; background: #000; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 0 100px rgba(0,0,0,0.8); position: relative; cursor: default; overflow: hidden; }
+
         .tv-static-layer { position: absolute; inset: 0; background-image: url('https://media.giphy.com/media/oEI9uWUic0S1m/giphy.gif'); background-size: cover; opacity: 0.15; pointer-events: none; }
+
         
+
         /* Contrôles du player */
+
         .player-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%); opacity: 0; transition: 0.3s; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; }
+
         .streaming-player:hover .player-overlay { opacity: 1; }
+
         
+
         .progress-container { width: 100%; height: 5px; background: rgba(255,255,255,0.2); border-radius: 3px; cursor: pointer; margin-bottom: 15px; position: relative; }
+
         .progress-bar { height: 100%; background: var(--accent); width: 0%; border-radius: 3px; position: relative; transition: width 0.1s linear; }
+
         .progress-thumb { position: absolute; right: -6px; top: -4px; width: 14px; height: 14px; background: #fff; border-radius: 50%; opacity: 0; transition: 0.2s; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+
         .progress-container:hover .progress-thumb { opacity: 1; }
 
+
+
         /* REWIND EFFECT */
+
         .rewinding .tv-static-layer { opacity: 0.4; filter: contrast(2); }
+
         .rewinding #video-content-placeholder { animation: glitch-text 0.1s infinite; color: var(--accent); opacity: 0.8; }
+
         @keyframes glitch-text { 0% { transform: translate(0); } 25% { transform: translate(-2px, 2px); } 50% { transform: translate(2px, -2px); } 75% { transform: translate(-2px, -2px); } 100% { transform: translate(0); } }
 
+
+
         /* --- ESTHÉTIQUE PAPIER (DOSSIER) --- */
+
         .paper-sheet { background-color: #d1d1d1; background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png'), linear-gradient(to bottom, transparent 95%, rgba(0,0,0,0.05) 95%); background-size: 100% 100%, 100% 30px; color: #1a1a1a; box-shadow: 0 20px 50px rgba(0,0,0,0.8), 5px 5px 0px #444; position: relative; }
-        .official-stamp { border: 4px double #8b0000; color: #8b0000; padding: 10px; font-weight: 900; text-transform: uppercase; font-family: 'VT323'; font-size: 2rem; display: inline-block; transform: rotate(-15deg); opacity: 0.7; mix-blend-mode: multiply; }
+
+        .official-stamp { border: 4px double #8b0000; color: #8b0000; padding: 10px; font-weight: 900; text-transform: uppercase; font-family: 'Anton', sans-serif; font-size: 2rem; display: inline-block; transform: rotate(-15deg); opacity: 0.7; mix-blend-mode: multiply; }
+
         .video-evidence { background: #000; border: 10px solid #222; box-shadow: inset 0 0 20px #000; position: relative; cursor: pointer; }
 
+
+
         /* --- INVENTAIRE --- */
+
         .inventory-hero-btn { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(57, 255, 20, 0.05); border: 2px dashed rgba(57, 255, 20, 0.2); transition: 0.3s; padding: 3rem; text-align: center; cursor: pointer; }
+
         .inventory-hero-btn:hover { background: rgba(57, 255, 20, 0.1); border-color: var(--accent); }
+
         
+
         /* --- CODE INPUT --- */
+
         #vhs-unlock-terminal {
-            /* Now integrated inside the grid as a VHS-sized card */
+
             position: relative;
+
             width: 100%;
+
             aspect-ratio: 1.6 / 1;
+
             background: #050505;
+
             border: 1px solid var(--accent);
+
             padding: 15px;
+
             display: none;
+
             flex-direction: column;
+
             align-items: center;
+
             justify-content: center;
+
             box-shadow: 0 0 20px rgba(57, 255, 20, 0.1);
+
             border-radius: 8px;
+
         }
+
         .code-display {
+
             font-family: 'JetBrains Mono', monospace;
+
             font-size: 1.8rem;
+
             letter-spacing: 5px;
+
             color: var(--accent);
+
             border-bottom: 1px solid var(--accent);
+
             margin-bottom: 10px;
+
             min-height: 40px;
+
             display: flex;
+
             justify-content: center;
+
             align-items: center;
+
             width: 80%;
+
         }
+
         .keypad-grid {
+
             display: grid;
+
             grid-template-columns: repeat(3, 1fr);
+
             gap: 5px;
+
             width: 80%;
+
         }
+
         .keypad-btn {
+
             background: #111;
+
             color: var(--accent);
+
             border: 1px solid rgba(57, 255, 20, 0.3);
-            font-family: 'VT323';
+
+            font-family: 'Anton', sans-serif;
+
             font-size: 1rem;
+
             padding: 4px 0;
+
             cursor: pointer;
+
             transition: 0.2s;
+
         }
+
         .keypad-btn:hover {
+
             background: var(--accent);
+
             color: #000;
+
         }
+
+
 
         /* --- INPUTS FORMULAIRE CONTACT --- */
+
         .input-field {
+
             width: 100%;
+
             background-color: #050505;
+
             border: 1px solid rgba(255,255,255,0.1);
+
             color: #fff;
+
             padding: 1rem;
+
             font-family: 'Courier Prime', monospace;
+
             transition: 0.3s;
+
         }
+
         .input-field:focus {
+
             outline: none;
+
             border-color: var(--accent);
+
             box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+
         }
+
     </style>
+
 </head>
+
 <body class="min-h-screen locked">
+
+    <!-- AUDIO DE FOND -->
+    <audio id="bg-music" loop>
+        <!-- Remplace 'musique.mp3' par le chemin de ton fichier téléchargé -->
+        <source src="Audio/musique.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- BOOT SEQUENCE -->
+
     <div id="boot-screen">
+
         <div id="boot-log"></div>
+
     </div>
+
+
 
     <!-- WARNING SCREEN -->
+
     <div id="warning-screen">
+
         <div class="warning-box">
+
             <div class="text-6xl mb-4">⚠️</div>
+
             <h1 class="text-red-600 font-bold text-3xl mb-6 tracking-widest font-mono">ACCÈS RESTREINT</h1>
+
             <p class="text-white/80 mb-8 font-mono text-sm leading-relaxed text-left">
+
                 Le dossier <span class="text-red-500 font-bold">1983-44-BLACKWOOD</span> a été classé SANS SUITE pour des raisons de sécurité nationale.<br><br>
+
                 Les données que vous allez consulter sont corrompues et potentiellement dangereuses. Le Bureau des Archives décline toute responsabilité.
+
             </p>
+
             <button onclick="enterSite()" class="border border-red-600 text-red-600 hover:bg-red-600 hover:text-black px-8 py-3 uppercase font-bold tracking-widest transition-all duration-300 font-mono text-xs">
+
                 Je comprends les risques
+
             </button>
+
         </div>
+
     </div>
+
+
 
     <div id="heavy-glitch-overlay"></div>
+
     <div class="grime-layer"></div>
+
     <div class="crt-overlay"></div>
 
-    <!-- NOTIFICATION (STRUCTURE CORRIGÉE) -->
+
+
+    <!-- NOTIFICATION -->
+
     <div id="sys-notification">
+
         <span id="notif-icon" class="text-2xl">⚠️</span>
+
         <div>
+
             <p id="notif-title" class="font-bold text-lg leading-none">ACCÈS AUTORISÉ</p>
+
             <div class="text-xs opacity-80 mt-1">
+
                 <span id="notif-message-text">Données déverrouillées : </span>
+
                 <span id="notif-person" class="font-bold">ADMIN</span>
+
             </div>
+
         </div>
+
     </div>
 
+
+
     <!-- HEADER -->
+
     <header class="w-full glass sticky top-0 z-[1000] border-b border-white/10 bg-black/95 text-left">
+
         <div class="max-w-7xl mx-auto px-6 h-28 flex justify-between items-center">
-            <div class="flex items-center gap-20">
+
+            <div class="flex items-center gap-6 md:gap-20">
+
                 <div class="logo-container" onclick="showView('home')">
-                    <span class="logo-heavy-glitch terminal">REWIND</span>
+
+                    <span class="logo-heavy-glitch">RE<span class="rewind-logo-w">W<svg class="rewind-logo-triangles" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 12l8.5 6V6l-8.5 6zm-9 0l8.5 6V6l-8.5 6z"/></svg></span>IND</span>
+
                 </div>
+
                 <nav class="hidden md:flex gap-12 text-left">
+
                     <a onclick="showView('dossier')" class="nav-link nav-item-dossier">Dossiers</a>
+
                     <a onclick="showView('victimes')" class="nav-link nav-item-victimes">Victimes</a>
+
                     <a onclick="showView('cassettes')" class="nav-link nav-item-cassettes">Cassettes</a>
+
                     <a onclick="showView('saisies')" class="nav-link nav-item-saisies">Saisies</a>
+
                     <a onclick="showView('contact')" class="nav-link nav-item-contact">Contact</a>
+
                 </nav>
+
             </div>
+
             
-            <div class="flex items-center gap-6">
+
+            <div class="flex items-center gap-4 md:gap-6">
+                <!-- BOUTON AUDIO -->
+                <button id="audio-toggle" onclick="toggleAudio()" class="text-white/40 hover:text-[var(--accent)] transition-colors" title="Musique On/Off">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2l4 4V4L9 8H7a2 2 0 00-2 2z"></path></svg>
+                </button>
+
                 <div class="cursor-pointer group relative" onclick="showView('saisies')">
+
                     <svg class="w-6 h-6 text-white/40 group-hover:text-[var(--accent)] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
                         <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+
                     </svg>
+
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-red-600 text-white text-[8px] font-bold px-1 rounded-sm animate-pulse">0</span>
+
                 </div>
-                <div class="mono text-[9px] text-right"><span class="text-red-500 animate-pulse font-bold block">!! SYSTEM_CRITICAL !!</span><span class="text-white/40">ID: ADMIN_7_GUEST</span></div>
+
+                <div class="hidden sm:block mono text-[9px] text-right"><span class="text-red-500 animate-pulse font-bold block">!! SYSTEM_CRITICAL !!</span><span class="text-white/40">ID: ADMIN_7_GUEST</span></div>
+
+                
+
+                <!-- Menu Hamburger Mobile -->
+
+                <button id="mobile-menu-btn" class="md:hidden text-white hover:text-[var(--accent)] transition-colors z-[1001]" onclick="toggleMobileMenu()">
+
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+
+                </button>
+
             </div>
+
         </div>
+
+
+
+        <!-- Overlay Menu Mobile -->
+
+        <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[999] flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300">
+
+            <nav class="flex flex-col gap-8 text-center text-2xl">
+
+                <a onclick="showView('dossier'); toggleMobileMenu()" class="nav-link nav-item-dossier">Dossiers</a>
+
+                <a onclick="showView('victimes'); toggleMobileMenu()" class="nav-link nav-item-victimes">Victimes</a>
+
+                <a onclick="showView('cassettes'); toggleMobileMenu()" class="nav-link nav-item-cassettes">Cassettes</a>
+
+                <a onclick="showView('saisies'); toggleMobileMenu()" class="nav-link nav-item-saisies">Saisies</a>
+
+                <a onclick="showView('contact'); toggleMobileMenu()" class="nav-link nav-item-contact">Contact</a>
+
+            </nav>
+
+        </div>
+
     </header>
 
+
+
     <main class="w-full max-w-6xl mx-auto p-6 md:p-12 relative z-10 text-left">
+
         
+
         <!-- VUE ACCUEIL -->
+
         <div id="view-home" class="view active">
+
             <!-- HERO FULL WIDTH -->
+
             <section class="relative w-full h-[85vh] overflow-hidden group cursor-pointer border-b border-white/10" onclick="playCassette('Système_Administrateur', 'ÉVÉNEMENT_RECURSION')">
+
                 <div class="absolute inset-0 bg-black">
+
                     <!-- Background Image simulating video thumbnail -->
+
                     <div class="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity duration-700" 
+
                          style="background-image: url('https://media.giphy.com/media/oEI9uWUic0S1m/giphy.gif'); background-size: cover; background-position: center;"></div>
+
                     <!-- Gradients for text readability -->
+
                     <div class="absolute inset-0 bg-gradient-to-t from-[#030405] via-transparent to-black/50"></div>
+
                 </div>
+
                 
+
                 <!-- Hero Content -->
+
                 <div class="absolute bottom-0 left-0 w-full p-6 md:p-20 flex flex-col items-start gap-6">
+
                     <span class="bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest animate-pulse">Bande Annonce Officielle</span>
-                    <h1 class="text-6xl md:text-8xl font-black text-white tracking-[0.2em] uppercase font-sans drop-shadow-lg glitch-text" style="font-family: 'VT323';">REWIND</h1>
-                    <p class="text-white/80 max-w-xl text-lg md:text-xl font-light leading-relaxed">
+
+                    
+
+                    <h1 class="text-6xl md:text-8xl logo-heavy-glitch" style="font-size: clamp(4rem, 10vw, 8rem);">RE<span class="rewind-logo-w">W<svg class="rewind-logo-triangles" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 12l8.5 6V6l-8.5 6zm-9 0l8.5 6V6l-8.5 6z"/></svg></span>IND</h1>
+
+                    
+
+                    <p class="text-white/80 max-w-xl text-lg md:text-xl font-light leading-relaxed mt-2">
+
                         Cinq étudiants. Une nuit. Une fréquence interdite. Découvrez les images qui ont mené à la classification du dossier Blackwood.
+
                     </p>
+
                     <div class="flex items-center gap-4 mt-4 group-hover:translate-x-2 transition-transform">
+
                         <div class="w-16 h-16 rounded-full border border-[var(--accent)] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+
                             <svg class="w-8 h-8 fill-[var(--accent)]" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+
                         </div>
+
                         <span class="mono text-[var(--accent)] text-sm tracking-[0.2em] uppercase">Lancer la lecture</span>
+
                     </div>
+
                 </div>
+
             </section>
 
+
+
             <!-- CONTENU DU RESTE DE LA PAGE (CENTRÉ) -->
+
             <div class="max-w-6xl mx-auto p-6 md:p-12 space-y-24 mt-12">
+
                 <section class="space-y-12">
-                    <div class="flex items-baseline gap-4"><h2 class="text-5xl font-bold tracking-tighter text-white/80 uppercase italic terminal">Aperçu <span class="text-white/60">#19<span id="code-3" class="glitch-digit">8</span>3-B</span></h2><div class="flex-1 h-[1px] bg-white/5 mb-3"></div></div>
+
+                    <div class="flex items-center gap-4 relative py-6">
+
+                        <h2 class="text-5xl font-bold tracking-widest text-white/80 uppercase italic terminal relative z-10">
+
+                            <span class="absolute -top-16 -left-4 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none not-italic select-none">ARCHIVE</span>
+
+                            Résumé de la série
+
+                        </h2>
+
+                        <div class="flex-1 h-[1px] bg-white/5"></div>
+
+                    </div>
+
                     <div class="relative">
+
                         <div class="grid grid-cols-1 lg:grid-cols-4 gap-0 items-start">
+
                             <div class="lg:col-span-3 glass p-1 rounded-sm overflow-hidden shadow-2xl border-white/10 z-10">
+
                                 <div class="bg-white/10 px-6 py-3 border-b border-white/10 text-[9px] opacity-80 uppercase mono flex justify-between">Rapport_officiel_altéré.doc <div class="w-2 h-2 rounded-full bg-red-950"></div></div>
+
                                 <div class="p-8 md:p-12 space-y-12 text-left">
+
                                     <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+
                                         <div class="flex flex-col gap-1 border-l border-white/5 pl-4"><span class="mono text-[8px] text-[var(--accent)] uppercase font-bold">Ref_Dossier</span><span class="text-xs font-bold text-white/90 uppercase">DPJ-BLACK-83</span></div>
+
                                         <div class="flex flex-col gap-1 border-l border-white/5 pl-4"><span class="mono text-[8px] text-[var(--accent)] uppercase font-bold">Classification</span><span class="text-xs font-bold text-white/90 uppercase">SANS_RECOURS</span></div>
+
                                         <div class="flex flex-col gap-1 border-l border-white/5 pl-4"><span class="mono text-[8px] text-[var(--accent)] uppercase font-bold">Site_Originel</span><span class="text-xs font-bold text-white/80 uppercase">Hôpital Abandonné</span></div>
+
                                         <div class="flex flex-col gap-1 border-l border-white/5 pl-4"><span class="mono text-[8px] text-red-600 uppercase font-bold animate-pulse">Dernière_Entrée</span><span class="text-xs font-bold text-red-600">--/--/2025</span></div>
+
                                     </div>
+
                                     <div class="space-y-8 text-lg text-white/90 font-medium pr-16 leading-relaxed">
-                                        <p>En 2025, un groupe d’étudiants en audiovisuel décide de tourner un documentaire sur un hôpital psychiatrique abandonné, fermé après un incendie en 1983.</p>
+
+                                        <p>En 2025, un groupe d’étudiants en audiovisuel décide de tourner un documentaire sur un hôpital psychiatrique abandonné, fermé après un incendie en 19<span id="code-3" class="glitch-digit">8</span>3.</p>
+
                                         <p>L’enquête débute suite aux rumeurs concernant une <span class="text-white font-bold border-b border-[var(--accent)] italic">mystérieuse cassette</span> retrouvée par un ouvrier aujourd'hui disparu. L'équipe a disparu un à un.</p>
+
                                     </div>
+
                                     <button onclick="showView('dossier')" class="btn-action mt-6">Accès dossier complet</button>
                                 </div>
                             </div>
-                            <div class="hidden lg:block absolute -right-8 top-1/2 -translate-y-1/2 z-20">
+                            <div class="flex justify-center lg:block relative lg:absolute mt-8 lg:mt-0 lg:-right-8 lg:top-1/2 lg:-translate-y-1/2 z-20">
                                 <div class="polaroid-evidence">
                                     <div class="tape-effect"></div>
                                     <div class="polaroid-img-container">
-                                        <img src="https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?q=80&w=300&h=300&auto=format&fit=crop" alt="Asile" class="w-full h-full object-cover grayscale opacity-80 contrast-125 sepia-[.5]">
+
+                                        <!-- MODIFICATION ICI : Remplace la valeur du src par ton image -->
+
+                                        <img src="Images/asile.webp" alt="Asile" class="w-full h-full object-cover grayscale opacity-80 contrast-125 sepia-[.5]">
+
                                     </div>
+
                                     <div class="polaroid-caption text-[#111] text-[10px] mt-2 font-bold mono">Archive_Ref_#001<br>Aile_Nord_1983</div>
+
                                     <div class="identifie-stamp">Identifié</div>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </section>
+
+
 
                 <section class="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
+
                     <a onclick="showView('victimes')" class="glass p-8 group border-white/5 hover:border-[var(--accent)]/30 cursor-pointer text-left"><div class="text-2xl grayscale group-hover:grayscale-0 opacity-60 group-hover:opacity-100">📁</div><h2 class="text-4xl font-bold uppercase text-white/90 group-hover:text-[var(--accent)] terminal mt-4">Les Disparus</h2><p class="text-[10px] text-white/60 uppercase tracking-[0.3em] font-bold">Fiches d'identification</p></a>
+
                     <a onclick="showView('cassettes')" class="glass p-8 group border-white/5 hover:border-[var(--accent)]/30 cursor-pointer text-left"><div class="text-2xl grayscale group-hover:grayscale-0 opacity-60 group-hover:opacity-100">📼</div><h2 class="text-4xl font-bold uppercase text-white/90 group-hover:text-[var(--accent)] terminal mt-4">Les Cassettes</h2><p class="text-[10px] text-white/60 uppercase tracking-[0.3em] font-bold">Archives vidéo 2025</p></a>
+
                 </section>
+
+
 
                 <section class="space-y-8 pb-20 text-left">
+
                     <div class="flex items-center gap-4"><h2 class="text-3xl font-bold uppercase text-white/80 italic terminal">Dernières Saisies</h2><div class="flex-1 h-[1px] bg-white/5"></div></div>
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Item 1 -->
-                    <div class="evidence-card" onclick="openItemDetail('item1')">
-                        <div class="evidence-tag">REF_001</div>
-                        <div class="item-preview">👕</div>
-                        <div class="item-info">
-                            <span class="item-title">T-shirt Rewind</span>
-                            <span class="item-price">25.00€</span>
-                        </div>
-                    </div>
-                    <!-- Item 2 -->
-                    <div class="evidence-card" onclick="openItemDetail('item5')">
-                        <div class="evidence-tag">REF_005</div>
-                        <div class="item-preview">🎒</div>
-                        <div class="item-info">
-                            <span class="item-title">Sac Explorateur</span>
-                            <span class="item-price">55.00€</span>
-                        </div>
-                    </div>
-                    <!-- Item 3 -->
-                    <div class="evidence-card" onclick="openItemDetail('item10')">
-                        <div class="evidence-tag">REF_010</div>
-                        <div class="item-preview">📹</div>
-                            <div class="item-info">
-                                <span class="item-title">Camescope 83</span>
-                                <span class="item-price">120.00€</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center pt-8">
-                         <button onclick="showView('saisies')" class="btn-action">VOIR LE RESTE DES SAISIES</button>
-                    </div>
-                </section>
-            </div>
+    <div class="evidence-card" onclick="openItemDetail('item1')">
+        <div class="evidence-tag">REF_001</div>
+        <div class="item-preview"><img src="Images/tshirt.webp" alt="T-shirt Rewind" class="w-full h-full object-cover"></div>
+        <div class="item-info">
+            <span class="item-title">T-shirt Rewind</span>
+            <span class="item-price">25.00€</span>
         </div>
+    </div>
+    <div class="evidence-card" onclick="openItemDetail('item5')">
+        <div class="evidence-tag">REF_005</div>
+        <div class="item-preview"><img src="Images/sac.webp" alt="Sac Explorateur" class="w-full h-full object-cover"></div>
+        <div class="item-info">
+            <span class="item-title">Sac Explorateur</span>
+            <span class="item-price">55.00€</span>
+        </div>
+    </div>
+    <div class="evidence-card" onclick="openItemDetail('item10')">
+        <div class="evidence-tag">REF_010</div>
+        <div class="item-preview"><img src="Images/camescope.webp" alt="Camescope 83" class="w-full h-full object-cover"></div>
+        <div class="item-info">
+            <span class="item-title">Camescope 83</span>
+            <span class="item-price">120.00€</span>
+        </div>
+    </div>
+</div>
+
+                    <div class="text-center pt-8">
+
+                         <button onclick="showView('saisies')" class="btn-action">VOIR LE RESTE DES SAISIES</button>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+
 
         <!-- VUE DOSSIER (INTÉGRALE RESTAURÉE) -->
+
         <div id="view-dossier" class="view space-y-12">
+
             <div class="paper-sheet max-w-4xl mx-auto p-12 md:p-20 text-[#1a1a1a]">
+
                 <div class="paper-header flex justify-between items-start border-b-2 border-black/10 pb-6 mb-12">
+
                     <div class="space-y-1 text-left">
+
                         <h2 class="font-black text-2xl uppercase tracking-tighter">Ministère de l'Intérieur</h2>
+
                         <h3 class="font-bold text-sm uppercase opacity-80">Direction de la Police Judiciaire</h3>
+
                         <p class="text-[10px] uppercase mt-4">Dossier n° : 1983-44-BLACKWOOD</p>
+
                     </div>
+
                     <div class="official-stamp">Classé Sans Suite</div>
+
                 </div>
+
                 
+
                 <div class="space-y-10 text-lg leading-relaxed text-left">
-                    <div class="flex gap-8 items-baseline"><span class="font-black uppercase text-xs border-b-2 border-black">Objet :</span><p class="font-bold">Enquête sur la disparition du groupe d'étudiants REWIND (2025)</p></div>
+
+                    <div class="flex gap-8 items-baseline"><span class="font-bold uppercase text-xs border-b-2 border-black">Objet :</span><p class="font-bold">Enquête sur la disparition du groupe d'étudiants REWIND (2025)</p></div>
+
                     
+
                     <div class="space-y-6">
-                        <p>En 2025, un groupe d’étudiants en audiovisuel décide de tourner un documentaire sur un hôpital psychiatrique abandonné, fermé après un incendie criminel en 1983. L'endroit est resté scellé depuis lors.</p>
+
+                        <p>En 2025, cinq étudiants en cinéma ont commis l'erreur de leur vie : ils ont voulu capturer l'invisible. Leur obsession ? Un hôpital psychiatrique dévoré par les flammes en 198<span id="code-4" class="glitch-digit">3</span>, et une légende urbaine qui refuse de mourir. Celle d'un ouvrier qui, dans les décombres, aurait déterré une cassette avant de s'évaporer dans le néant. Une bande que personne n'a jamais vue, mais dont l'écho semble encore résonner dans les couloirs de l’asile de Blackwood.</p>
+
                         
+
                         <div class="my-12">
+
                             <div class="video-evidence aspect-video group" onclick="playCassette('Division_Police_Judiciaire', 'DOC_AUDIOVISUEL_REF_A')">
+
                                 <div class="absolute inset-0 bg-[#050505] flex items-center justify-center text-white/40 text-[10px] uppercase tracking-widest group-hover:text-white transition-all">Preuve Vidéo : BANDE_ANNONCE_RÉCUPÉRÉE</div>
+
                             </div>
+
                         </div>
 
-                        <p>L’idée leur vient lorsqu’un des membres du groupe entend parler d’un ouvrier qui, des années plus tôt, aurait retrouvé une mystérieuse cassette vidéo dans les ruines du bâtiment. Peu de temps après cette découverte, cet ouvrier aurait disparu dans des circonstances inexpliquées.</p>
+
+
+                        <p>Pour Nathan, Laura, Sofiane, Eva et Hugo, c'était le "sujet parfait". Le ticket pour la gloire. Pour ne rien rater, pour que le spectateur soit au cœur du carnage, chacun s'est muni d'une caméra à cassette. Cinq regards. Cinq objectifs. Cinq versions d'une même descente aux enfers.</p>
+
                         
+
                         <div class="bg-black/5 p-8 border-l-4 border-black italic my-8">
-                            "Comme l’endroit est réputé hanté, ils y voient l’occasion parfaite de se faire remarquer. Pour renforcer l’authenticité, chacun se munit d’une caméra à cassette analogique, délaissant le numérique pour capter l'âme du lieu."
+
+                            "Mais l'image ment."
+
                         </div>
 
-                        <p>Très vite, les images captent des phénomènes étranges : des voix sans source physique, des ombres distordues. Le bâtiment semble avoir piégé l'équipe dans une récurrence temporelle vicieuse liée à la **Cassette 000** (Ref: 000/198<span id="code-4" class="glitch-digit">3</span>).</p>
+
+
+                        <p>Très vite, le documentaire déraille. Les caméras deviennent des traîtres. Elles captent ce que l'œil humain refuse de voir : des ombres qui ne se projettent sur aucun mur, des voix qui murmurent sous le souffle des bandes, des visages figés, hurlants, qui n'apparaissent que sur un seul moniteur à la fois. Ce qui est filmé à gauche n'est plus vrai à droite. Même le temps semble se mélanger.</p>
+
+
+
+                        <p>Puis, le silence. Un par un, ils s'effacent. Ils ne laissent rien derrière eux. Rien, sauf leurs caméras, gisant sur le sol poussiéreux, chargées de leurs derniers instants.</p>
+
+                        
+
+                        <p>On ne regarde pas REWIND, on la subit. On cherche la réponse à des questions que personne n’ose poser. Et tandis que les pièces du puzzle s'assemblent, une ombre plane sur chaque seconde filmée :</p>
+
+
 
                         <p class="font-bold underline mt-12 text-red-900 uppercase">NOTE FINALE DE L'ENQUÊTEUR :</p>
-                        <p class="italic text-lg">"Si tout a commencé avec la **Cassette 000**… pourquoi est-elle la seule pièce à conviction introuvable aujourd’hui ?"</p>
+
+                        <p class="italic text-lg">"Si tout a commencé par une cassette... où est-elle ?"</p>
+
                     </div>
+
                 </div>
+
                 <div class="mt-20 pt-12 border-t border-black/20 flex justify-center"><button onclick="showView('home')" class="btn-action !bg-black !text-white border-none">Fermer le Dossier</button></div>
+
             </div>
+
         </div>
+
+
 
         <!-- VUE VICTIMES -->
+
         <div id="view-victimes" class="view space-y-12">
+
             <div class="flex flex-col items-center gap-4 mb-20 text-center"><h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest">Registre des Disparus</h2><p class="mono text-[10px] opacity-40 tracking-[0.4em]">TOTAL_2025 // RÉCUPÉRATION PHYSIQUE</p></div>
+
             
+
             <div class="victimes-pile max-w-5xl mx-auto" id="victims-container">
+
                 <!-- 1. NATHAN -->
+
                 <div class="victim-folder" id="folder-nathan" style="--folder-rot: -2.5deg; --folder-x: -20px;">
+
                     <div class="folder-front" onclick="toggleFolder('nathan')">
-                        <div class="folder-tab"><div class="tab-field">Name: <span>Dubois Nathan</span></div><div class="tab-field">No: <span>V-01</span></div></div>
+
+                        <div class="folder-tab"><div class="tab-field">Name: <span>Nathan D.</span></div><div class="tab-field">No: <span>V-01</span></div></div>
+
                         <span class="folder-name">Nathan Dubois</span><span class="folder-sub">Réf: DPJ-2025-V01 / LEADER</span>
+
                     </div>
+
                     <div class="folder-content"><div class="victim-file-sheet"><div class="staple"></div><div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
-                        <div class="flex flex-col items-center"><div class="id-photo"><span class="text-white/20 text-[8px] uppercase">[SC_DIR_01]</span></div><div class="status-tag">Disparu</div></div>
+
+                        <div class="flex flex-col items-center"><div class="id-photo"><img src="Images/nathan.webp" alt="Nathan Dubois" class="w-full h-full object-cover"></div><div class="status-tag">Disparu</div></div>
+
                         <div class="md:col-span-2 space-y-4">
-                            <div class="report-section"><span class="report-label">Fiche Signalétique</span><p><span class="font-bold">Âge :</span> 23 ans</p></div>
-                            <div class="report-section"><span class="report-label">Description Physique</span><p>Grand, athlétique, cheveux châtains courts. Porte souvent une casquette technique.</p></div>
-                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Charismatique, autoritaire, manifeste une forte résistance aux preuves d'anomalies.</p></div>
-                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-nathan" class="censored">NATHAN_A_DÉCOUVERT_LA_CASSETTE_000_LORS_DE_L_EXPLORATION_INITIALE_SIGNAL_DÉGRADÉ_RÉCURRENCE_ACTIVE</span></p></div>
+
+                            <div class="report-section"><span class="report-label">Fiche Signalétique</span><p><span class="font-bold">Joué par :</span> Quentin Carteau</p><p><span class="font-bold">Âge :</span> 23 ans</p></div>
+
+                            <div class="report-section"><span class="report-label">Description Physique</span><p>Grand, allure confiante. Porte toujours un blouson de cuir usé et sa caméra d'épaule comme une extension de son propre corps. Un regard fatigué par des nuits de montage.</p></div>
+
+                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Obsessionnel et manipulateur. Nathan est un perfectionniste qui voit le monde à travers un objectif. Sa peur de l’échec le pousse à ignorer les signaux d’alerte pour privilégier "l’image culte".</p></div>
+
+                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-nathan" class="censored">Nathan a trouvé la cassette 000 dans le bureau du directeur, scellée derrière une cloison qu’il a lui-même brisée pour "créer une mise en scène". Il l’a saisit et est tombé raide mort devant la caméra.</span></p></div>
+
                         </div>
+
                     </div></div></div>
+
                 </div>
+
+
 
                 <!-- 2. LAURA -->
+
                 <div class="victim-folder" id="folder-laura" style="--folder-rot: 1.5deg; --folder-x: 15px;">
+
                     <div class="folder-front" onclick="toggleFolder('laura')">
-                        <div class="folder-tab"><div class="tab-field">Name: <span>Wagner Laura</span></div><div class="tab-field">No: <span>V-0<span id="code-1" class="glitch-digit">2</span></span></div></div>
+
+                        <div class="folder-tab"><div class="tab-field">Name: <span>Laura W.</span></div><div class="tab-field">No: <span>V-0<span id="code-1" class="glitch-digit">2</span></span></div></div>
+
                         <span class="folder-name">Laura Wagner</span><span class="folder-sub">Réf: DPJ-2025-V02 / HISTORIENNE</span>
+
                     </div>
+
                     <div class="folder-content"><div class="victim-file-sheet"><div class="staple"></div><div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
-                        <div class="flex flex-col items-center"><div class="id-photo"><span class="text-white/20 text-[8px] uppercase">[SC_HIST_02]</span></div><div class="status-tag">Disparue</div></div>
+
+                        <div class="flex flex-col items-center"><div class="id-photo"><img src="Images/laura.webp" alt="Laura Wagner" class="w-full h-full object-cover"></div><div class="status-tag">Disparue</div></div>
+
                         <div class="md:col-span-2 space-y-4">
-                            <div class="report-section"><span class="report-label">Fiche Signalétique</span><p><span class="font-bold">Âge :</span> 22 ans</p></div>
-                            <div class="report-section"><span class="report-label">Description Physique</span><p>Taille moyenne, lunettes de vue, cheveux blonds attachés.</p></div>
-                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Analytique, méthodique, tendance à la rationalisation excessive.</p></div>
-                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-laura" class="censored">IDENTIFICATION_DES_VICTIMES_DE_1983_LIEE_A_LA_CASSETTE_000_LAURA_A_SUIVI_LE_SIGNAL_JUSQU_AU_SOUS_SOL_DE_L_AILE_NORD_DISPARITION</span></p></div>
+
+                            <div class="report-section"><span class="report-label">Fiche Signalétique</span><p><span class="font-bold">Joué par :</span> Aude Bola</p><p><span class="font-bold">Âge :</span> 22 ans</p></div>
+
+                            <div class="report-section"><span class="report-label">Description Physique</span><p>Lunettes à monture fine, cheveux attachés. Style utilitaire. On la voit souvent entourée de câbles et de piles de documents poussiéreux.</p></div>
+
+                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>AAnalytique et sceptique. Laura refuse de croire au surnaturel, cherchant désespérément une logique historique. Cette rigidité mentale devient sa propre prison face à l'impossible.</p></div>
+
+                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-laura" class="censored">Elle a déterré la cassette au fond d'un carton d'archives médicales. En lisant l'étiquette, elle réalise que l'écriture est la sienne. Peu de temps après une forme est apparue à l’image, engloutissant Laura, la bande s’arrête ici.</span></p></div>
+
                         </div>
+
                     </div></div></div>
+
                 </div>
+
+
 
                 <!-- 3. SOFIANE -->
+
                 <div class="victim-folder" id="folder-sofiane" style="--folder-rot: -1.2deg; --folder-x: -25px;">
+
                     <div class="folder-front" onclick="toggleFolder('sofiane')">
-                        <div class="folder-tab"><div class="tab-field">Name: <span>Belkacem S.</span></div><div class="tab-field">No: <span>V-03</span></div></div>
+
+                        <div class="folder-tab"><div class="tab-field">Name: <span>Sofiane B.</span></div><div class="tab-field">No: <span>V-03</span></div></div>
+
                         <span class="folder-name">Sofiane Belkacem</span><span class="folder-sub">Réf: DPJ-2025-V03 / SON</span>
+
                     </div>
+
                     <div class="folder-content"><div class="victim-file-sheet"><div class="staple"></div><div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
-                        <div class="flex flex-col items-center"><div class="id-photo"><span class="text-white/20 text-[8px] uppercase">[SC_AUDIO_03]</span></div><div class="status-tag">Disparu</div></div>
+
+                        <div class="flex flex-col items-center"><div class="id-photo"><img src="Images/sofiane.webp" alt="Sofiane Belkacem" class="w-full h-full object-cover"></div><div class="status-tag">Disparu</div></div>
+
                         <div class="md:col-span-2 space-y-4">
-                            <div class="report-section"><span class="report-label">Fiche Signalétique</span><p><span class="font-bold">Âge :</span> 24 ans</p></div>
-                            <div class="report-section"><span class="report-label">Description Physique</span><p>Barbe courte, porte toujours un casque audio professionnel, yeux sombres.</p></div>
-                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Observateur, introverti, paranoïa croissante suite aux captures audio.</p></div>
-                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-sofiane" class="censored">CAPTURE_VOIX_DU_FUTUR_SOFIANE_B_AVAIT_L_ENREGISTREMENT_000_SUR_SA_BANDE_SONORE_AVANT_LA_DÉMATÉRIALISATION_DU_SON</span></p></div>
+
+                            <div class="report-section"><span class="report-label">Fiche Signalétique</span><p><span class="font-bold">Joué par :</span>Zackary Zazoua</p><p><span class="font-bold">Âge :</span> 24 ans</p></div>
+
+                            <div class="report-section"><span class="report-label">Description Physique</span><p>Silhouette frêle, porte en permanence un casque audio imposant autour du cou. Son visage est marqué par une terreur qu'il ne cherche même plus à cacher.</p></div>
+
+                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>OEmpathique et paranoïaque. Sofiane ressent l'hostilité des lieux avant les autres. Son hypersensibilité auditive le rend vulnérable aux fréquences de l'hôpital.</p></div>
+
+                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-sofiane" class="censored">Il a trouvé la cassette insérée dans un vieux magnétoscope qui tournait à vide dans une chambre d'isolement. C'est le bruit du rembobinage, capté par son micro, qui l'a guidé. Lorsqu’il l’a regardé, ses yeux se sont écarquillés, il se les ai arraché et est tombé mort.</span></p></div>
+
                         </div>
+
                     </div></div></div>
+
                 </div>
+
+
 
                 <!-- 4. EVA -->
+
                 <div class="victim-folder" id="folder-eva" style="--folder-rot: 3.5deg; --folder-x: 10px;">
+
                     <div class="folder-front" onclick="toggleFolder('eva')">
-                        <div class="folder-tab"><div class="tab-field">Name: <span>Vasquez Eva</span></div><div class="tab-field">No: <span>V-04</span></div></div>
+
+                        <div class="folder-tab"><div class="tab-field">Name: <span>Eva V.</span></div><div class="tab-field">No: <span>V-04</span></div></div>
+
                         <span class="folder-name">Eva Vasquez</span><span class="folder-sub">Réf: DPJ-2025-V04 / ACCESSOIRES</span>
+
                     </div>
+
                     <div class="folder-content"><div class="victim-file-sheet"><div class="staple"></div><div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
-                        <div class="flex flex-col items-center"><div class="id-photo"><span class="text-white/20 text-[8px] uppercase">[SC_POV_04]</span></div><div class="status-tag">Disparue</div></div>
+
+                        <div class="flex flex-col items-center"><div class="id-photo"><img src="Images/eva.webp" alt="Eva Vasquez" class="w-full h-full object-cover"></div><div class="status-tag">Disparue</div></div>
+
                         <div class="md:col-span-2 space-y-4">
-                            <div class="report-section"><span class="report-label">Fiche Signalétique</span><p><span class="font-bold">Âge :</span> 21 ans</p></div>
-                            <div class="report-section"><span class="report-label">Description Physique</span><p>Teint mat, tatouage linéaire bras droit, vêtue de vêtements amples noirs.</p></div>
-                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Intuitive, calme, semble étrangement à l'aise dans les zones d'isolement.</p></div>
-                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-eva" class="censored">SYNCHRONISATION_AVEC_ENTITÉ_MAJEURE_DÉTECTÉE_RÉCURRENCE_VIDÉO_EFFACEMENT_MANUEL_LOKALISÉE_DANS_LA_PIÈCE_MAUDITE</span></p></div>
+
+                            <div class="report-section"><span class="report-label">Fiche Signalétique</span><p><span class="font-bold">Joué par :</span> Mélanie Duciel</p><p><span class="font-bold">Âge :</span> 21 ans</p></div>
+
+                            <div class="report-section"><span class="report-label">Description Physique</span><p>Style alternatif, tatouée, avec des piercings. Elle porte son sac à dos partout où elle va. Ses mouvements sont fluides, presque chorégraphiés.</p></div>
+
+                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Détachée et fatale. Eva semble avoir un lien préexistant avec l'hôpital. Son calme est troublant; elle semble vibrer en harmonie avec l’asile.</p></div>
+
+                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-eva" class="censored">Elle a trouvé la cassette posée sur un plateau de soins, bien en évidence, comme si elle l'attendait. Elle l’a ramassé sans surprise, l'embrassant presque, puis est partie en hurlant et en lâchant sa caméra. Les rushs s’arrêtent ici, sur un hurlement de mort.</span></p></div>
+
                         </div>
+
                     </div></div></div>
+
                 </div>
+
+
 
                 <!-- 5. HUGO -->
+
                 <div class="victim-folder" id="folder-hugo" style="--folder-rot: -1.5deg; --folder-x: -30px;">
+
                     <div class="folder-front" onclick="toggleFolder('hugo')">
-                        <div class="folder-tab"><div class="tab-field">Name: <span>Moreau Hugo</span></div><div class="tab-field">No: <span>V-05</span></div></div>
+
+                        <div class="folder-tab"><div class="tab-field">Name: <span>Hugo M.</span></div><div class="tab-field">No: <span>V-05</span></div></div>
+
                         <span class="folder-name">Hugo Moreau</span><span class="folder-sub">Réf: DPJ-2025-V05 / TEMOIN</span>
+
                     </div>
+
                     <div class="folder-content"><div class="victim-file-sheet"><div class="staple"></div><div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
-                        <div class="flex flex-col items-center"><div class="id-photo"><span class="text-white/20 text-[8px] uppercase">[SC_PIC_05]</span></div><div class="status-tag">Disparu</div></div>
+
+                        <div class="flex flex-col items-center"><div class="id-photo"><img src="Images/hugo.webp" alt="Hugo Moreau" class="w-full h-full object-cover"></div><div class="status-tag">Disparu</div></div>
+
                         <div class="md:col-span-2 space-y-4">
-                            <div class="report-section"><span class="report-label">Fiche Signalétique</span><p><span class="font-bold">Âge :</span> 25 ans</p></div>
-                            <div class="report-section"><span class="report-label">Description Physique</span><p>Elancé, appareil photo argentique au cou, cheveux noirs en bataille.</p></div>
-                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Analytique, distant, solitaire. Arrivé tardivement sur le projet.</p></div>
-                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-hugo" class="censored">TÉMOIN_DE_LA_DÉMATÉRIALISATION_FINALE_EXTRACTION_DES_DONNÉES_DANS_SAC_NATHAN_AVANT_RUPTURE_DE_RÉALITÉ</span></p></div>
+
+                            <div class="report-section"><span class="report-label">Fiche Signalétique</span><p><span class="font-bold">Joué par :</span> Vincent Moutinard</p><p><span class="font-bold">Âge :</span> 25 ans</p></div>
+
+                            <div class="report-section"><span class="report-label">Description Physique</span><p>Athlétique, barbe de quelques jours. Look de baroudeur. Il manipule son matériel numérique avec une précision de pro, contrastant avec le grain sale des autres.</p></div>
+
+                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Pragmatique et protecteur. Hugo est le dernier rempart du groupe. Son instinct de survie est fort, mais sa loyauté envers ses amis le pousse à commettre des erreurs.</p></div>
+
+                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-hugo" class="censored">Hugo a trouvé la cassette dans la sacoche abandonnée de Nathan, au milieu d'un couloir vide. En voulant comprendre ce qui est arrivé à son ami, il l'a inséré dans son lecteur portable. Après avoir posé la caméra, il a couru et a sauté par la fenêtre du 3e étage.</span></p></div>
+
                         </div>
+
                     </div></div></div>
+
                 </div>
+
+
 
                 <!-- DOSSIER INCONNU -->
+
                 <div class="victim-folder" id="folder-inconnu" style="display: none; --folder-rot: 0deg; --folder-x: 0px;">
+
                      <div class="folder-front" onclick="openInconnu()">
+
                         <div class="folder-tab"><div class="tab-field">Name: <span>INCONNU</span></div><div class="tab-field">No: <span>000</span></div></div>
+
                         <span class="folder-name">???</span><span class="folder-sub">Réf: SANS_RETOUR</span>
+
                     </div>
+
                     <div class="folder-content"><div class="victim-file-sheet"><div class="staple"></div>
+
                         <div class="p-10 space-y-6">
+
                             <h4 class="font-bold text-red-900 terminal text-xl">ERREUR_LOGIQUE_77 : DONNÉES CORROMPUES</h4>
+
                             <p class="text-sm leading-loose text-left font-mono">
+
                                 <span class="censored">SÉQUENCE_D'ACTIVATION_REQUISE_POUR_DÉCHIFFREMENT</span> <br>
+
                                 1. <span class="font-black underline text-red-700">VICTIMES</span> <span class="censored">IDENTIFICATION</span> <br>
+
                                 2. <span class="font-black underline text-red-700">SAISIES</span> <span class="censored">RÉCUPÉRATION</span> <br>
+
                                 3. <span class="font-black underline text-red-700">ACCUEIL</span> <span class="censored">INITIALISATION</span> <br>
+
                                 4. <span class="font-black underline text-red-700">DOSSIER</span> <span class="censored">LECTURE_FINALE</span>
+
                             </p>
+
                         </div>
+
                     </div></div>
+
                 </div>
 
+
+
             </div>
+
             <div class="text-center pb-40"><button onclick="showView('home')" class="btn-action">Quitter les Archives</button></div>
+
         </div>
+
+
 
         <!-- VUE CASSETTES -->
+
         <div id="view-cassettes" class="view space-y-12">
+
             <div class="flex flex-col items-center gap-4 mb-20 text-center"><h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest">Rushs Récupérés</h2><p class="mono text-[10px] opacity-40 tracking-[0.4em]">SYNC_READY // OCT <span id="digit-4" class="glitch-digit">3</span></p></div>
+
             
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 mb-20 px-4" id="tapes-grid">
+
                 <div class="vhs-cassette" style="--char-color: var(--color-nathan);" onclick="playCassette('Nathan Dubois', 'NATHAN')"><div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Nathan</span></div><div class="vhs-play-overlay">▶</div></div>
+
                 <div class="vhs-cassette" style="--char-color: var(--color-laura);" onclick="playCassette('Laura Wagner', 'LAURA')"><div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Laura</span></div><div class="vhs-play-overlay">▶</div></div>
+
                 <div class="vhs-cassette" style="--char-color: var(--color-sofiane);" onclick="playCassette('Sofiane Belkacem', 'SOFIANE')"><div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Sofiane</span></div><div class="vhs-play-overlay">▶</div></div>
+
                 <div class="vhs-cassette" style="--char-color: var(--color-eva);" onclick="playCassette('Eva Vasquez', 'EVA')"><div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Eva</span></div><div class="vhs-play-overlay">▶</div></div>
+
                 <div class="vhs-cassette" style="--char-color: var(--color-hugo);" onclick="playCassette('Hugo Moreau', 'HUGO')"><div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Hugo</span></div><div class="vhs-play-overlay">▶</div></div>
+
                 
+
                 <!-- TERMINAL DIGICODE (INTÉGRÉ DANS LA GRILLE) -->
+
                 <div id="vhs-unlock-terminal" style="display: none;">
+
                     <div class="terminal text-white/40 text-xs mb-4">CODE DE DÉCRYPTAGE REQUIS</div>
+
                     <div id="code-display" class="code-display text-4xl mb-4 tracking-widest text-[var(--accent)]">----</div>
+
                     <div class="grid grid-cols-3 gap-2 keypad-grid">
+
                         <button onclick="pressCode('1')" class="keypad-btn">1</button><button onclick="pressCode('2')" class="keypad-btn">2</button><button onclick="pressCode('3')" class="keypad-btn">3</button>
+
                         <button onclick="pressCode('4')" class="keypad-btn">4</button><button onclick="pressCode('5')" class="keypad-btn">5</button><button onclick="pressCode('6')" class="keypad-btn">6</button>
+
                         <button onclick="pressCode('7')" class="keypad-btn">7</button><button onclick="pressCode('8')" class="keypad-btn">8</button><button onclick="pressCode('9')" class="keypad-btn">9</button>
+
                         <button onclick="resetCode()" class="keypad-btn text-xs">DEL</button><button onclick="pressCode('0')" class="keypad-btn">0</button><button onclick="resetCode()" class="keypad-btn text-xs">CLR</button>
+
                     </div>
+
                 </div>
+
+
 
                 <!-- CASSETTE 000 -->
+
                 <div class="vhs-cassette damaged" id="tape-000" style="display: none;" onclick="playCassette('ORIGINE', 'CASSETTE 000 : LE GLITCH')">
+
                     <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div>
+
                     <div class="vhs-label-plate"><span class="vhs-label-text">000</span></div>
+
                     <div class="vhs-play-overlay" style="color: #8b0000">⚠️</div><div class="vhs-grime"></div>
+
                 </div>
+
             </div>
+
             <div class="text-center pb-20 flex flex-col md:flex-row justify-center items-center gap-6">
+
                 <button onclick="showView('home')" class="btn-action">Quitter le Stockage</button>
+
                 <a href="#" class="btn-action !bg-[var(--accent)] !text-black hover:!bg-white hover:!border-white hover:!shadow-[0_0_30px_white]">
+
                     VOIR SUR VISION+
+
                 </a>
+
             </div>
+
         </div>
+
+
 
         <!-- VUE SAISIES -->
+
         <div id="view-saisies" class="view space-y-12">
+
             <div class="flex flex-col items-center gap-4 mb-20 text-center"><h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest">Inventaire des Saisies</h2><p class="mono text-[10px] opacity-40 uppercase tracking-[0.5em]">Stockage // SÉCURITÉ NIV_4</p></div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20 px-4 text-left">
-                <div class="evidence-card" onclick="openItemDetail('item1')"><div class="evidence-tag">REF_001</div><div class="item-preview">👕</div><div class="item-info"><span class="item-title">T-shirt Rewind</span><span class="item-price">25.00€</span></div></div>
-                <div class="evidence-card" onclick="openItemDetail('item2')"><div class="evidence-tag">REF_002</div><div class="item-preview">🧢</div><div class="item-info"><span class="item-title">Casquette Rewind</span><span class="item-price">20.00€</span></div></div>
-                <div class="evidence-card" onclick="openItemDetail('item3')"><div class="evidence-tag">REF_003</div><div class="item-preview">🦺</div><div class="item-info"><span class="item-title">Gilet Rewind</span><span class="item-price">45.00€</span></div></div>
-                <div class="evidence-card" onclick="openItemDetail('item4')"><div class="evidence-tag">REF_004</div><div class="item-preview">🔑</div><div class="item-info"><span class="item-title">Porte-clé rewind</span><span class="item-price">8.00€</span></div></div>
-                <!-- INDICE SAISIES (5) id="code-2" -->
-                <div class="evidence-card" onclick="openItemDetail('item5')"><div class="evidence-tag">REF_005</div><div class="item-preview">🎒</div><div class="item-info"><span class="item-title">Sac Explorateur</span><span class="item-price">5<span id="code-2" class="glitch-digit">5</span>.00€</span></div></div>
-                <div class="evidence-card" onclick="openItemDetail('item6')"><div class="evidence-tag">REF_006</div><div class="item-preview">🧥</div><div class="item-info"><span class="item-title">Sweat hoody rewind</span><span class="item-price">40.00€</span></div></div>
-                <div class="evidence-card" onclick="openItemDetail('item7')"><div class="evidence-tag">REF_007</div><div class="item-preview">🍼</div><div class="item-info"><span class="item-title">Gourde rewind</span><span class="item-price">18.00€</span></div></div>
-                <div class="evidence-card" onclick="openItemDetail('item8')"><div class="evidence-tag">REF_008</div><div class="item-preview">📓</div><div class="item-info"><span class="item-title">Carnet et stylo rewind</span><span class="item-price">15.00€</span></div></div>
-                <div class="evidence-card" onclick="openItemDetail('item9')"><div class="evidence-tag">REF_009</div><div class="item-preview">📼</div><div class="item-info"><span class="item-title">VHS Collector</span><span class="item-price">35.00€</span></div></div>
-                <div class="evidence-card" onclick="openItemDetail('item10')"><div class="evidence-tag">REF_010</div><div class="item-preview">📹</div><div class="item-info"><span class="item-title">Camescope 83</span><span class="item-price">120.00€</span></div></div>
-            </div>
+    <div class="evidence-card" onclick="openItemDetail('item1')">
+        <div class="evidence-tag">REF_001</div>
+        <div class="item-preview"><img src="Images/tshirt.webp" alt="T-shirt Rewind" class="w-full h-full object-cover"></div>
+        <div class="item-info"><span class="item-title">T-shirt Rewind</span><span class="item-price">25.00€</span></div>
+    </div>
+    <div class="evidence-card" onclick="openItemDetail('item2')">
+        <div class="evidence-tag">REF_002</div>
+        <div class="item-preview"><img src="Images/casquette.webp" alt="Casquette Rewind" class="w-full h-full object-cover"></div>
+        <div class="item-info"><span class="item-title">Casquette Rewind</span><span class="item-price">20.00€</span></div>
+    </div>
+    <div class="evidence-card" onclick="openItemDetail('item3')">
+        <div class="evidence-tag">REF_003</div>
+        <div class="item-preview"><img src="Images/gilet.webp" alt="Gilet Rewind" class="w-full h-full object-cover"></div>
+        <div class="item-info"><span class="item-title">Gilet Rewind</span><span class="item-price">45.00€</span></div>
+    </div>
+    <div class="evidence-card" onclick="openItemDetail('item4')">
+        <div class="evidence-tag">REF_004</div>
+        <div class="item-preview"><img src="Images/porte-cle.webp" alt="Porte-clé" class="w-full h-full object-cover"></div>
+        <div class="item-info"><span class="item-title">Porte-clé rewind</span><span class="item-price">8.00€</span></div>
+    </div>
+    <div class="evidence-card" onclick="openItemDetail('item5')">
+        <div class="evidence-tag">REF_005</div>
+        <div class="item-preview"><img src="Images/sac.webp" alt="Sac Explorateur" class="w-full h-full object-cover"></div>
+        <div class="item-info"><span class="item-title">Sac Explorateur</span><span class="item-price">5<span id="code-2" class="glitch-digit">5</span>.00€</span></div>
+    </div>
+    <div class="evidence-card" onclick="openItemDetail('item6')">
+        <div class="evidence-tag">REF_006</div>
+        <div class="item-preview"><img src="Images/hoody.webp" alt="Sweat hoody" class="w-full h-full object-cover"></div>
+        <div class="item-info"><span class="item-title">Sweat hoody rewind</span><span class="item-price">40.00€</span></div>
+    </div>
+    <div class="evidence-card" onclick="openItemDetail('item7')">
+        <div class="evidence-tag">REF_007</div>
+        <div class="item-preview"><img src="Images/gourde.webp" alt="Gourde" class="w-full h-full object-cover"></div>
+        <div class="item-info"><span class="item-title">Gourde rewind</span><span class="item-price">18.00€</span></div>
+    </div>
+    <div class="evidence-card" onclick="openItemDetail('item8')">
+        <div class="evidence-tag">REF_008</div>
+        <div class="item-preview"><img src="Images/carnet.webp" alt="Carnet" class="w-full h-full object-cover"></div>
+        <div class="item-info"><span class="item-title">Carnet et stylo rewind</span><span class="item-price">15.00€</span></div>
+    </div>
+    <div class="evidence-card" onclick="openItemDetail('item9')">
+        <div class="evidence-tag">REF_009</div>
+        <div class="item-preview"><img src="Images/vhs-collector.webp" alt="VHS Collector" class="w-full h-full object-cover"></div>
+        <div class="item-info"><span class="item-title">VHS Collector</span><span class="item-price">35.00€</span></div>
+    </div>
+    <div class="evidence-card" onclick="openItemDetail('item10')">
+        <div class="evidence-tag">REF_010</div>
+        <div class="item-preview"><img src="Images/camescope.webp" alt="Camescope" class="w-full h-full object-cover"></div>
+        <div class="item-info"><span class="item-title">Camescope 83</span><span class="item-price">120.00€</span></div>
+    </div>
+</div>
+
             <div class="text-center pb-20"><button onclick="showView('home')" class="btn-action">Quitter les Preuves</button></div>
+
         </div>
+
+
 
         <!-- VUE CONTACT -->
+
         <div id="view-contact" class="view space-y-12">
+
             <div class="flex flex-col items-center gap-4 mb-20 text-center">
+
                 <h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest">Signalement</h2>
+
                 <p class="mono text-[10px] opacity-40 uppercase tracking-[0.4em]">Canal Sécurisé // Cryptage RSA-4096</p>
+
             </div>
+
             
+
             <div class="max-w-2xl mx-auto glass p-10 border-white/10">
+
                 <form onsubmit="handleContactSubmit(event)" class="space-y-8 text-left">
+
                     <div>
+
                         <label class="block text-white/60 font-bold mb-2 uppercase font-mono text-xs tracking-wider">Nom de code / Matricule</label>
+
                         <input type="text" class="input-field" placeholder="AGENT_..." required>
+
                     </div>
+
                     <div>
+
                         <label class="block text-white/60 font-bold mb-2 uppercase font-mono text-xs tracking-wider">Fréquence de contact (Email)</label>
+
                         <input type="email" class="input-field" placeholder="agent@rewind.com" required>
+
                     </div>
+
                     <div>
+
                         <label class="block text-white/60 font-bold mb-2 uppercase font-mono text-xs tracking-wider">Rapport d'incident</label>
+
                         <textarea rows="5" class="input-field" placeholder="Décrivez l'anomalie observée..." required></textarea>
+
                     </div>
+
                     <button type="submit" class="btn-action w-full mt-4">Envoyer le rapport</button>
+
                 </form>
+
             </div>
+
              <div class="text-center pb-40"><button onclick="showView('home')" class="btn-action">Retour Base</button></div>
+
         </div>
+
+
 
         <!-- OVERLAYS (PLAYER STREAMING INTÉGRÉ) -->
+
         <div id="item-detail-view" class="fixed inset-0 z-[10000] bg-black/95 flex items-center justify-center hidden backdrop-blur-xl" onclick="closeItemDetail()">
+
             <div class="detail-sheet" onclick="event.stopPropagation()"><div class="detail-visual"><div id="detail-icon"></div></div><div class="detail-content text-left"><div class="absolute top-4 right-4"><button onclick="closeItemDetail()" class="text-2xl hover:text-red-700">✕</button></div><h3 id="detail-title" class="detail-title"></h3><span id="detail-price" class="item-price text-xl text-[var(--accent)]"></span><p class="mt-4" id="detail-desc">Article saisi. Analyse de laboratoire en cours...</p><span id="detail-ref" class="hidden"></span><button class="btn-action mt-8 w-full" onclick="addToCart()">Ajouter au panier</button></div></div>
+
         </div>
+
+
 
         <!-- PLAYER VIDEO STREAMING -->
+
         <div id="video-player-view" class="fixed inset-0 z-[10000] bg-black/95 flex items-center justify-center hidden backdrop-blur-xl" onclick="if(event.target === this) closePlayer()">
+
              <button onclick="closePlayer()" class="absolute top-6 right-6 z-50 text-white/50 hover:text-white transition-colors">
+
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+
             </button>
+
             <div class="streaming-player relative w-full max-w-5xl aspect-video bg-black shadow-2xl overflow-hidden group border border-white/10 rounded-lg" onclick="event.stopPropagation()">
+
                 <div class="absolute inset-0 bg-black flex items-center justify-center overflow-hidden">
+
                      <div class="tv-static-layer absolute inset-0 opacity-20" style="background-image: url('https://media.giphy.com/media/oEI9uWUic0S1m/giphy.gif'); background-size: cover;"></div>
+
                      <div id="video-content-placeholder" class="text-white/20 font-mono text-xl animate-pulse">NO SIGNAL</div>
+
                      <div class="vhs-rewind-effect"></div>
+
                 </div>
+
                 <!-- Overlay Controls -->
+
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-6">
+
                     <div class="flex justify-between items-start">
+
                         <div>
+
                             <h3 id="player-title-stream" class="text-white font-bold text-xl tracking-wide font-sans">TITRE</h3>
+
                             <p id="player-user-stream" class="text-white/60 text-xs font-mono">SOURCE: ARCHIVE</p>
+
                         </div>
+
                         <div class="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">REC</div>
+
                     </div>
+
                     <div class="space-y-4">
+
                         <div class="w-full bg-white/20 h-1 rounded cursor-pointer relative group/progress">
+
                              <div id="stream-progress-bar" class="absolute top-0 left-0 h-full bg-[var(--accent)] w-0 transition-all duration-100 relative">
+
                                 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full scale-0 group-hover/progress:scale-100 transition-transform shadow-lg"></div>
+
                              </div>
+
                         </div>
+
                         <div class="flex justify-between items-center text-white">
+
                             <div class="flex items-center gap-6">
+
                                 <button onclick="rewindTape()" class="hover:text-[var(--accent)] transition" title="Rembobiner">
+
                                     <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+
                                 </button>
+
                                 <button id="btn-play-pause" onclick="togglePlay()" class="hover:text-[var(--accent)] transition">
+
                                     <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+
                                 </button>
+
                                 <div class="font-mono text-sm opacity-80"><span id="current-time">00:00</span> / <span id="total-time">04:20</span></div>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
     </main>
 
+
+
     <footer class="w-full glass mt-32 border-t border-white/20 py-16 px-6 text-left relative z-20">
+
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-12">
+
             <!-- Logo & Copyright -->
+
             <div class="space-y-4">
-                <div class="text-3xl font-bold tracking-tighter text-white uppercase font-sans drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" style="font-family: 'VT323';">R<span class="text-[var(--accent)]">E</span>WIND</div>
+
+                <div class="logo-heavy-glitch" style="font-size: 2.5rem; text-shadow: none;">RE<span class="rewind-logo-w">W<svg class="rewind-logo-triangles" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 12l8.5 6V6l-8.5 6zm-9 0l8.5 6V6l-8.5 6z"/></svg></span>IND</div>
+
                 <div class="mono text-xs text-white uppercase tracking-[0.2em]">© 1983-2025 BUREAU DES ARCHIVES</div>
+
             </div>
+
+
 
             <!-- Navigation -->
+
             <div class="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-16 mono text-sm text-white uppercase tracking-widest font-bold">
+
                 <div class="flex flex-col gap-4">
+
                     <a onclick="showView('home')" class="hover:text-[var(--accent)] cursor-pointer transition-colors hover:translate-x-1 duration-300">Accueil</a>
+
                     <a onclick="showView('dossier')" class="hover:text-[var(--accent)] cursor-pointer transition-colors hover:translate-x-1 duration-300">Synopsis</a>
+
                     <a onclick="showView('victimes')" class="hover:text-[var(--accent)] cursor-pointer transition-colors hover:translate-x-1 duration-300">Personnages</a>
+
                 </div>
+
                 <div class="flex flex-col gap-4">
+
                     <a onclick="showView('cassettes')" class="hover:text-[var(--accent)] cursor-pointer transition-colors hover:translate-x-1 duration-300">Épisodes</a>
+
                     <a onclick="showView('saisies')" class="hover:text-[var(--accent)] cursor-pointer transition-colors hover:translate-x-1 duration-300">Boutique</a>
+
                     <a onclick="showView('contact')" class="hover:text-[var(--accent)] cursor-pointer transition-colors hover:translate-x-1 duration-300">Contact</a>
+
                 </div>
+
                  <div class="flex flex-col gap-4">
+
                     <a href="#" class="hover:text-[var(--accent)] cursor-pointer transition-colors hover:translate-x-1 duration-300">Mentions Légales</a>
+
                     <a href="#" class="hover:text-[var(--accent)] cursor-pointer transition-colors hover:translate-x-1 duration-300">CGV</a>
+
                 </div>
+
             </div>
+
+
 
             <!-- VISION Platform Button -->
+
             <div class="flex flex-col items-start md:items-end gap-4">
+
                 <span class="text-xs uppercase tracking-widest text-white font-mono">Une production originale</span>
+
                 <a href="#" class="btn-action !bg-white !text-black hover:!bg-[var(--accent)] hover:!border-[var(--accent)] hover:!shadow-[0_0_20px_var(--accent)] flex items-center gap-3 px-6 py-3 group">
+
                     <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse"></div>
+
                     <span class="font-black tracking-tighter italic group-hover:scale-105 transition-transform" style="font-family: 'Inter';">VISION+</span>
+
                 </a>
+
             </div>
+
         </div>
+
     </footer>
 
+
+
     <script>
+
         // Logique de boot sequence
+
         window.addEventListener('load', function() {
+
             document.body.classList.add('locked');
+
             const bootText = document.getElementById('boot-log');
+
             const lines = [
+
                 "> SYSTEM_INIT...",
+
                 "> CHECKING_INTEGRITY... [FAIL]",
+
                 "> BYPASSING SECURITY PROTOCOLS...",
+
                 "> LOADING ARCHIVE_DPJ_1983...",
+
                 "> DECRYPTING BLOCKS...",
+
                 "> ERROR: CORRUPTED DATA SEGMENTS FOUND.",
+
                 "> WARNING: RESTRICTED ACCESS DETECTED.",
+
                 "> ESTABLISHING SECURE CONNECTION..."
+
             ];
+
             
+
             let i = 0;
             const interval = setInterval(() => {
+
                 if (i < lines.length) {
+
                     const div = document.createElement('div');
+
                     div.className = 'log-line';
+
                     if (lines[i].includes("ERROR") || lines[i].includes("FAIL") || lines[i].includes("WARNING")) {
+
                         div.className += ' log-error';
+
                     }
+
                     div.textContent = lines[i];
+
                     if (bootText) bootText.appendChild(div);
+
                     i++;
+
                 } else {
+
                     clearInterval(interval);
+
                     setTimeout(() => {
+
                         const bootScreen = document.getElementById('boot-screen');
+
                         if(bootScreen) bootScreen.style.display = 'none';
+
                         const warningScreen = document.getElementById('warning-screen');
+
                         if(warningScreen) warningScreen.style.display = 'flex';
+
                     }, 1000);
+
                 }
+
             }, 150);
+
         });
+
+
 
         function enterSite() {
             const warningScreen = document.getElementById('warning-screen');
             if(warningScreen) warningScreen.style.display = 'none';
             document.body.classList.remove('locked');
+            
+            // Lancer la musique au clic
+            const bgMusic = document.getElementById('bg-music');
+            const audioBtn = document.getElementById('audio-toggle');
+            if(bgMusic) {
+                bgMusic.volume = 0.4; // Volume à 40% pour ambiance de fond
+                bgMusic.play().then(() => {
+                    if(audioBtn) audioBtn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2l4 4V4L9 8H7a2 2 0 00-2 2z"></path></svg>';
+                }).catch(e => {
+                    console.log("Lecture bloquée");
+                    if(audioBtn) audioBtn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>';
+                });
+            }
+        }
+
+        // Fonction pour activer/couper le son manuellement
+        function toggleAudio() {
+            const bgMusic = document.getElementById('bg-music');
+            const audioBtn = document.getElementById('audio-toggle');
+            if(!bgMusic) return;
+            if(bgMusic.paused) {
+                bgMusic.play();
+                if(audioBtn) audioBtn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2l4 4V4L9 8H7a2 2 0 00-2 2z"></path></svg>';
+            } else {
+                bgMusic.pause();
+                if(audioBtn) audioBtn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path></svg>';
+            }
         }
 
         const itemsData = {
-            item1: { ref: "REF_001", title: "T-shirt Rewind", price: "25.00€", icon: "👕", desc: "Textile coton noir 100%. Logo Rewind dégradé sérigraphié. Retrouvé dans le casier de stockage n°42." },
-            item2: { ref: "REF_002", title: "Casquette Rewind", price: "20.00€", icon: "🧢", desc: "Modèle ajustable, broderie haute densité 'REWIND' sur le front." },
-            item3: { ref: "REF_003", title: "Gilet Rewind", price: "45.00€", icon: "🦺", desc: "Gilet tactique d'exploration multi-poches. Utilisé pour transporter les caméras à cassettes." },
-            item4: { ref: "REF_004", title: "Porte-clé rewind", price: "8.00€", icon: "🔑", desc: "Miniature VHS en métal chromé. Une pièce de collection robuste." },
-            item5: { ref: "REF_005", title: "Sac Explorateur", price: "55.00€", icon: "🎒", desc: "Étanche, protection caméras incluse. Retrouvé vide près de l'entrée de l'aile Nord." },
-            item6: { ref: "REF_006", title: "Sweat hoody rewind", price: "40.00€", icon: "🧥", desc: "Coton lourd, logo réfléchissant pour les interventions de nuit." },
-            item7: { ref: "REF_007", title: "Gourde rewind", price: "18.00€", icon: "🍼", desc: "Acier inoxydable 750ml. Inscription 'BUREAU DES ARCHIVES' gravée." },
-            item8: { ref: "REF_008", title: "Carnet et stylo rewind", price: "15.00€", icon: "📓", desc: "Papier recyclé, stylo logotypé. Idéal pour noter les relevés paranormaux." },
-            item9: { ref: "REF_009", title: "VHS Collector", price: "35.00€", icon: "📼", desc: "Édition limitée scellée sous vide. Contient des rushs exclusifs." },
-            item10: { ref: "REF_010", title: "Camescope 83", price: "120.00€", icon: "📹", desc: "Modèle authentique révisé 1983. Vendu comme pièce historique." }
-        };
+    item1: { ref: "REF_001", title: "T-shirt Rewind", price: "25.00€", icon: "Images/tshirt.webp", desc: "Textile coton noir 100%. Logo Rewind dégradé sérigraphié. Retrouvé dans le casier de stockage n°42." },
+    item2: { ref: "REF_002", title: "Casquette Rewind", price: "20.00€", icon: "Images/casquette.webp", desc: "Modèle ajustable, broderie haute densité 'REWIND' sur le front." },
+    item3: { ref: "REF_003", title: "Gilet Rewind", price: "45.00€", icon: "Images/gilet.webp", desc: "Gilet tactique d'exploration multi-poches. Utilisé pour transporter les caméras à cassettes." },
+    item4: { ref: "REF_004", title: "Porte-clé rewind", price: "8.00€", icon: "Images/porte-cle.webp", desc: "Miniature VHS en métal chromé. Une pièce de collection robuste." },
+    item5: { ref: "REF_005", title: "Sac Explorateur", price: "55.00€", icon: "Images/sac.webp", desc: "Étanche, protection caméras incluse. Retrouvé vide près de l'entrée de l'aile Nord." },
+    item6: { ref: "REF_006", title: "Sweat hoody rewind", price: "40.00€", icon: "Images/hoody.webp", desc: "Coton lourd, logo réfléchissant pour les interventions de nuit." },
+    item7: { ref: "REF_007", title: "Gourde rewind", price: "18.00€", icon: "Images/gourde.webp", desc: "Acier inoxydable 750ml. Inscription 'BUREAU DES ARCHIVES' gravée." },
+    item8: { ref: "REF_008", title: "Carnet et stylo rewind", price: "15.00€", icon: "Images/carnet.webp", desc: "Papier recyclé, stylo logotypé. Idéal pour noter les relevés paranormaux." },
+    item9: { ref: "REF_009", title: "VHS Collector", price: "35.00€", icon: "Images/vhs-collector.webp", desc: "Édition limitée scellée sous vide. Contient des rushs exclusifs." },
+    item10: { ref: "REF_010", title: "Camescope 83", price: "120.00€", icon: "Images/camescope.webp", desc: "Modèle authentique révisé 1983. Vendu comme pièce historique." }
+};
+
+
 
         const watchedTapes = new Set();
+
         let cartCount = 0;
+
         let bonusUnlocked = false;
+
         let currentCodeInput = "";
+
         const correctCode = "2583";
+
         let isPlaying = false;
+
         let progressInterval;
 
+
+
         function showNotification(title, text, isAlert = false, name = "") {
+
             const notif = document.getElementById('sys-notification');
+
             if(!notif) return;
+
             const titleEl = document.getElementById('notif-title');
+
             if(titleEl) titleEl.textContent = title;
+
             const contentEl = document.getElementById('notif-message-text');
+
             if(contentEl) contentEl.textContent = text + (name ? " : " : "");
+
             const personSpan = document.getElementById('notif-person');
+
             if(personSpan) personSpan.textContent = name ? name.toUpperCase() : "ADMIN";
+
             notif.classList.toggle('alert', isAlert);
+
             notif.classList.add('active');
+
             setTimeout(() => { if(notif) notif.classList.remove('active'); }, 5000);
+
         }
+
+
 
         function triggerGlobalGlitch() {
+
             document.body.classList.add('page-glitch');
+
             setTimeout(() => {
+
                 document.body.classList.remove('page-glitch');
+
                 showNotification("ALERTE SYSTÈME", "Accès à un nouveau dossier autorisé.", true);
+
                 const unknownFolder = document.getElementById('folder-inconnu');
+
                 if(unknownFolder) unknownFolder.style.display = 'block';
+
                 bonusUnlocked = true;
-                // Active tous les chiffres glitchés - AVEC IDs CORRIGÉS
+
                 if(document.getElementById('code-1')) document.getElementById('code-1').classList.add('active');
+
                 if(document.getElementById('code-2')) document.getElementById('code-2').classList.add('active');
+
                 if(document.getElementById('code-3')) document.getElementById('code-3').classList.add('active');
+
                 if(document.getElementById('code-4')) document.getElementById('code-4').classList.add('active');
+
             }, 1500);
+
         }
+
+
 
         function playCassette(name, title) {
+
             const player = document.getElementById('video-player-view');
+
             if(!player) return;
+
             document.getElementById('player-title-stream').textContent = title.toUpperCase();
+
             document.getElementById('player-user-stream').textContent = "SOURCE: " + name.toUpperCase();
+
             player.style.display = 'flex';
+
             resetPlayer();
+
             togglePlay();
 
+
+
             if(['Nathan Dubois', 'Laura Wagner', 'Sofiane Belkacem', 'Eva Vasquez', 'Hugo Moreau'].includes(name)) {
+
                 watchedTapes.add(name);
+
                 const map = { 'Nathan Dubois': 'note-nathan', 'Laura Wagner': 'note-laura', 'Sofiane Belkacem': 'note-sofiane', 'Eva Vasquez': 'note-eva', 'Hugo Moreau': 'note-hugo' };
+
                 const targetNote = document.getElementById(map[name]);
+
                 if(targetNote && !targetNote.classList.contains('revealed')) {
+
                     targetNote.classList.add('revealed');
+
                     showNotification("ACCÈS AUTORISÉ", `Données décryptées`, false, name);
+
                 }
+
                 if(watchedTapes.size === 5 && !bonusUnlocked) triggerGlobalGlitch();
+
             }
+
         }
 
-        // Fonctions Player Streaming & Rewind
+
+
         function togglePlay() {
+
             const btn = document.getElementById('btn-play-pause');
+
             const player = document.querySelector('.streaming-player');
+
             if(player.classList.contains('rewinding')) return;
+
+
 
             if(isPlaying) {
+
                 isPlaying = false;
+
                 clearInterval(progressInterval);
+
                 btn.innerHTML = '<svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+
             } else {
+
                 isPlaying = true;
+
                 btn.innerHTML = '<svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+
                 progressInterval = setInterval(() => {
+
                     const bar = document.getElementById('stream-progress-bar');
+
                     let w = parseFloat(bar.style.width || 0);
+
                     if(w >= 100) { togglePlay(); return; }
+
                     bar.style.width = (w + 0.5) + '%';
+
                     const totalSec = 260;
+
                     const currentSec = Math.floor((w / 100) * totalSec);
+
                     const min = Math.floor(currentSec / 60).toString().padStart(2, '0');
+
                     const sec = (currentSec % 60).toString().padStart(2, '0');
+
                     document.getElementById('current-time').textContent = `${min}:${sec}`;
+
                 }, 100);
+
             }
+
         }
+
+
 
         function rewindTape() {
+
             const player = document.querySelector('.streaming-player');
+
             if(player.classList.contains('rewinding')) return;
 
-            // Stop playback
+
+
             isPlaying = false;
+
             clearInterval(progressInterval);
+
             document.getElementById('btn-play-pause').innerHTML = '<svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+
+
 
             player.classList.add('rewinding');
+
             
+
             const bar = document.getElementById('stream-progress-bar');
+
             const rewindInterval = setInterval(() => {
+
                 let w = parseFloat(bar.style.width || 0);
-                w -= 5; // Vitesse de rembobinage
+
+                w -= 5;
+
                 if (w <= 0) {
+
                     w = 0;
+
                     clearInterval(rewindInterval);
+
                     player.classList.remove('rewinding');
+
                 }
+
                 bar.style.width = w + '%';
+
                 
+
                 const totalSec = 260; 
+
                 const currentSec = Math.floor((w / 100) * totalSec);
+
                 const min = Math.floor(currentSec / 60).toString().padStart(2, '0');
+
                 const sec = (currentSec % 60).toString().padStart(2, '0');
+
                 document.getElementById('current-time').textContent = `${min}:${sec}`;
+
             }, 30);
+
         }
+
+
 
         function resetPlayer() {
+
             isPlaying = false;
+
             clearInterval(progressInterval);
+
             document.getElementById('stream-progress-bar').style.width = '0%';
+
             document.getElementById('current-time').textContent = '00:00';
+
             document.getElementById('btn-play-pause').innerHTML = '<svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+
             const player = document.querySelector('.streaming-player');
+
             if(player) player.classList.remove('rewinding');
+
         }
+
+
 
         function openInconnu() {
+
             toggleFolder('inconnu');
+
             if(bonusUnlocked) {
+
                 setTimeout(() => {
+
                     showNotification("ALERTE ARCHIVE", "Cryptage actif. Entrez le code.", true);
+
                     const terminal = document.getElementById('vhs-unlock-terminal');
+
                     if(terminal) terminal.style.display = 'flex';
+
                 }, 1000);
+
             }
+
         }
+
+
 
         function pressCode(num) {
+
             if(currentCodeInput.length < 4) {
+
                 currentCodeInput += num;
+
                 const display = document.getElementById('code-display');
+
                 if(display) display.textContent = currentCodeInput.padEnd(4, '-');
+
             }
+
             if(currentCodeInput.length === 4) {
+
                 if(currentCodeInput === correctCode) {
+
                     showNotification("CODE VALIDE", "Cassette 000 : RÉCUPÉRÉE.", false);
+
                     document.getElementById('vhs-unlock-terminal').style.display = 'none';
+
                     document.getElementById('tape-000').style.display = 'block';
+
                 } else {
+
                     currentCodeInput = "";
+
                     const display = document.getElementById('code-display');
+
                     if(display) { display.textContent = "ERROR"; setTimeout(() => display.textContent = "----", 1000); }
+
                 }
+
             }
+
         }
+
+
 
         function resetCode() { currentCodeInput = ""; document.getElementById('code-display').textContent = "----"; }
+
         function showView(viewId) { closePlayer(); closeItemDetail(); document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); const target = document.getElementById('view-' + viewId); if(target) target.classList.add('active'); document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active')); const activeLink = document.querySelector('.nav-item-' + viewId); if(activeLink) activeLink.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
         function closePlayer() { const v = document.getElementById('video-player-view'); if(v) { v.style.display = 'none'; resetPlayer(); } }
+
         
+
         function openItemDetail(itemId) { 
+
             const data = itemsData[itemId] || itemsData['item1']; 
+
             
-            // SÉCURISATION : On vérifie que chaque élément existe avant de le modifier
+
             const refEl = document.getElementById('detail-ref');
+
             if(refEl) refEl.textContent = data.ref || "REF_000";
+
             
+
             const titleEl = document.getElementById('detail-title');
+
             if(titleEl) titleEl.textContent = data.title;
+
             
+
             const priceEl = document.getElementById('detail-price');
+
             if(priceEl) priceEl.textContent = data.price;
+
             
+
             const iconEl = document.getElementById('detail-icon');
-            if(iconEl) iconEl.textContent = data.icon;
+
+            if(iconEl) iconEl.innerHTML = `<img src="${data.icon}" class="max-h-full max-w-full object-contain">`;
+
             
+
             const descEl = document.getElementById('detail-desc');
+
             if(descEl) descEl.textContent = data.desc || "Analyse en cours...";
+
             
+
             const viewEl = document.getElementById('item-detail-view');
+
             if(viewEl) viewEl.style.display = 'flex'; 
+
         }
 
+
+
         function closeItemDetail() { const i = document.getElementById('item-detail-view'); if(i) i.style.display = 'none'; }
+
         function addToCart() { cartCount++; document.getElementById('cart-count').textContent = cartCount; closeItemDetail(); }
+
         function toggleFolder(id) { const f = document.getElementById('folder-' + id); if(!f) return; const active = f.classList.contains('active'); document.querySelectorAll('.victim-folder').forEach(v => v.classList.remove('active')); if(!active) f.classList.add('active'); }
+
         function handleContactSubmit(e) { e.preventDefault(); showNotification("SIGNALEMENT", "Rapport transmis et crypté.", false); document.querySelector('form').reset(); }
+
+
+
+        // Script pour basculer le menu hamburger
+
+        function toggleMobileMenu() {
+
+            const menu = document.getElementById('mobile-menu');
+
+            const btnIcon = document.querySelector('#mobile-menu-btn svg');
+
+            const isClosed = menu.classList.contains('pointer-events-none');
+
+
+
+            if (isClosed) {
+
+                menu.classList.remove('opacity-0', 'pointer-events-none');
+
+                btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
+
+            } else {
+
+                menu.classList.add('opacity-0', 'pointer-events-none');
+
+                btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
+
+            }
+
+        }
+
     </script>
+
 </body>
+
 </html>
