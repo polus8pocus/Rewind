@@ -532,42 +532,114 @@
 
 
         /* --- CASSETTES VHS RÉALISTES & VIGNETTES SURVOL --- */
-
+        /* MISE À JOUR RÉALISME */
         .vhs-cassette { 
             position: relative; 
             width: 100%; 
             aspect-ratio: 1.6 / 1; 
-            background: #1a1a24; 
+            background-color: #1a1a20;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
             border-radius: 8px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 2px 3px rgba(255,255,255,0.1); 
+            box-shadow: 
+                inset 1px 1px 2px rgba(255,255,255,0.15),
+                inset -2px -2px 5px rgba(0,0,0,0.6),
+                0 20px 50px rgba(0,0,0,0.8);
             cursor: pointer; 
             overflow: hidden; 
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            border: 4px solid #111; 
+            border: 1px solid #0a0a0e;
         }
 
-        /* Augmentation du zoom au survol et z-index plus élevé */
-        .vhs-cassette:hover { transform: scale(1.15) translateY(-10px) rotateX(5deg); z-index: 20; box-shadow: 0 30px 60px rgba(0,0,0,1); }
+        .vhs-cassette:hover { 
+            transform: scale(1.15) translateY(-10px) rotateX(5deg); 
+            z-index: 20; 
+            box-shadow: 
+                inset 1px 1px 2px rgba(255,255,255,0.2),
+                inset -2px -2px 5px rgba(0,0,0,0.7),
+                0 30px 60px rgba(0,0,0,1); 
+        }
 
-        .vhs-ribbed { position: absolute; bottom: 0; left: 0; right: 0; height: 75%; background-image: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0,0,0,0.3) 4px, rgba(0,0,0,0.3) 6px); pointer-events: none; }
+        .vhs-ribbed { 
+            position: absolute; 
+            bottom: 0; left: 0; right: 0; 
+            height: 75%; 
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0,0,0,0.4) 4px, rgba(0,0,0,0.4) 6px); 
+            box-shadow: inset 0 -5px 10px rgba(0,0,0,0.3);
+            pointer-events: none; 
+            opacity: 0.8;
+        }
 
-        .vhs-window-unit { position: absolute; top: 22%; width: 26%; height: 40%; background: #000; border: 4px solid #222; border-radius: 4px; box-shadow: inset 0 8px 15px #000; overflow: hidden; }
+        .vhs-window-unit { 
+            position: absolute; 
+            top: 22%; width: 26%; height: 40%; 
+            background: #080808;
+            border-radius: 3px; 
+            border: 1px solid #2a2a30;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.9); 
+            overflow: hidden; 
+        }
+        .vhs-window-unit::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
 
         .win-left { left: 6%; } .win-right { right: 6%; }
 
-        .vhs-reel { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background: radial-gradient(circle, #3d2616 0%, #1a0f07 60%, transparent 75%); border-radius: 50%; }
+        .vhs-reel { 
+            position: absolute; 
+            top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 102px; height: 102px; 
+            background: repeating-radial-gradient(
+                circle at center,
+                #2a1a12 0px, 
+                #3d2616 2px,
+                #2a1a12 4px
+            );
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+            border-radius: 50%; 
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        .vhs-hub { width: 22px; height: 22px; background: #ddd; border-radius: 50%; border: 3px dashed #999; }
+        .vhs-hub { 
+            width: 24px; height: 24px; 
+            background: #e0e0e0;
+            border-radius: 50%; 
+            box-shadow: inset 1px 1px 2px rgba(255,255,255,1), inset -1px -1px 2px rgba(0,0,0,0.3);
+            border: 3px dashed #999; 
+            position: relative;
+        }
 
-        .vhs-label-plate { position: absolute; top: 18%; left: 34%; width: 32%; height: 50%; background: #fff; border-radius: 2px; box-shadow: 1px 3px 6px rgba(0,0,0,0.5); background-image: linear-gradient(to bottom, var(--char-color) 0%, var(--char-color) 25%, transparent 25%), repeating-linear-gradient(to bottom, transparent, transparent 18px, #eee 18px, #eee 20px); display: flex; align-items: center; justify-content: center; padding-top: 15px; }
+        .vhs-label-plate { 
+            position: absolute; 
+            top: 18%; left: 34%; 
+            width: 32%; height: 50%; 
+            background: #fdfbf7;
+            border-radius: 2px; 
+            box-shadow: 1px 2px 4px rgba(0,0,0,0.3);
+            background-image: 
+                linear-gradient(to bottom, var(--char-color) 0%, var(--char-color) 25%, transparent 25%), 
+                repeating-linear-gradient(to bottom, transparent, transparent 18px, #e8e6e1 18px, #e8e6e1 19px),
+                url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding-top: 15px; 
+            border: 1px solid rgba(0,0,0,0.1);
+        }
 
-        .vhs-label-text { font-family: 'Permanent Marker', cursive; color: #111; font-size: 1.4rem; transform: rotate(-1deg); }
+        .vhs-label-text { font-family: 'Permanent Marker', cursive; color: #111; font-size: 1.4rem; transform: rotate(-1deg); opacity: 0.9; }
 
         .vhs-play-overlay { position: absolute; inset: 0; background: transparent; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; z-index: 70; font-size: 3rem; }
 
         .vhs-cassette:hover .vhs-play-overlay { opacity: 1; }
 
-        /* Nouvelle Vignette Image au survol */
         .vhs-hover-thumbnail {
             position: absolute;
             inset: 0;
@@ -580,14 +652,16 @@
             align-items: flex-end;
             justify-content: flex-start;
             padding: 15px;
+            border-radius: 8px;
         }
-        /* Voile sombre retiré */
+        
         .vhs-hover-thumbnail::before {
             content: '';
             position: absolute;
             inset: 0;
             background: transparent;
             transition: 0.3s;
+            border-radius: 8px;
         }
         .vhs-cassette:hover .vhs-hover-thumbnail { opacity: 1; }
         
@@ -606,15 +680,17 @@
         }
         .vhs-cassette:hover .vhs-hover-title { transform: translateY(0); }
 
-        /* Style spécifique pour la cassette 000 endommagée */
+        .vhs-cassette.damaged { 
+            background-color: #2a201c; 
+            border-color: #1a1512;
+            filter: contrast(1.1) sepia(0.4); 
+        }
 
-        .vhs-cassette.damaged { background: #2a201c; border-color: #5d4037; filter: contrast(1.1) sepia(0.4); }
-
-        .vhs-cassette.damaged .vhs-label-plate { background-color: #dcd0c0; background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); transform: rotate(1deg); }
+        .vhs-cassette.damaged .vhs-label-plate { background-color: #dcd0c0; background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); transform: rotate(1deg); border-color: rgba(139, 0, 0, 0.3); }
 
         .vhs-cassette.damaged .vhs-label-text { color: #8b0000; font-size: 1.8rem; }
 
-        .vhs-grime { position: absolute; inset: 0; background-image: url('https://www.transparenttextures.com/patterns/dust.png'); opacity: 0.4; pointer-events: none; mix-blend-mode: overlay; z-index: 55; }
+        .vhs-grime { position: absolute; inset: 0; background-image: url('https://www.transparenttextures.com/patterns/dust.png'); opacity: 0.4; pointer-events: none; mix-blend-mode: overlay; z-index: 55; border-radius: 8px; }
 
 
 
@@ -635,6 +711,21 @@
         .item-title { font-family: 'Anton', sans-serif; font-size: 1.8rem; color: #fff; text-transform: uppercase; line-height: 1; }
 
         .item-price { color: var(--accent); font-weight: bold; font-family: 'JetBrains Mono'; font-size: 1.1rem; }
+        
+        /* FILTRES BOUTIQUE */
+        .filter-btn {
+            background: #0a0c10;
+            color: #b0b8c1;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.5rem 1.5rem;
+            text-transform: uppercase;
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .filter-btn.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 15px var(--accent); }
 
 
 
@@ -1017,7 +1108,7 @@
 
 
 
-    <main class="w-full max-w-6xl mx-auto p-6 md:p-12 relative z-10 text-left">
+    <main class="w-full relative z-10 text-left">
 
         
 
@@ -1033,13 +1124,14 @@
 
                     <!-- Background Image simulating video thumbnail -->
 
-                    <div class="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity duration-700" 
+                    <div class="absolute inset-0 opacity-90 group-hover:opacity-100 transition-opacity duration-700" 
 
-                         style="background-image: url('https://media.giphy.com/media/oEI9uWUic0S1m/giphy.gif'); background-size: cover; background-position: center;"></div>
+                         style="background-image: url('Images/hero-bg.webp'); background-size: cover; background-position: center;"></div>
 
                     <!-- Gradients for text readability -->
 
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#030405] via-transparent to-black/50"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#030405]/70 via-[#030405]/20 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#030405]/50 via-transparent to-transparent"></div>
 
                 </div>
 
@@ -1047,17 +1139,18 @@
 
                 <!-- Hero Content -->
 
-                <div class="absolute bottom-0 left-0 w-full p-6 md:p-20 flex flex-col items-start gap-6">
+                <div class="absolute bottom-0 left-0 w-full p-6 md:p-20 flex flex-col items-start gap-6 z-10">
 
-                    <span class="bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest animate-pulse">Bande Annonce Officielle</span>
-
-                    
-
-                    <h1 class="text-6xl md:text-8xl logo-heavy-glitch" style="font-size: clamp(4rem, 10vw, 8rem);">RE<span class="rewind-logo-w">W<svg class="rewind-logo-triangles" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 12l8.5 6V6l-8.5 6zm-9 0l8.5 6V6l-8.5 6z"/></svg></span>IND</h1>
+                    <span class="bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.5)]">Bande Annonce Officielle</span>
 
                     
+                    <!-- H1 Modifié ici -->
+                    <h1 class="logo-heavy-glitch flex flex-col items-start gap-2" style="font-size: clamp(4rem, 10vw, 8rem); line-height: 1;">
+                        <span>RE<span class="rewind-logo-w">W<svg class="rewind-logo-triangles" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 12l8.5 6V6l-8.5 6zm-9 0l8.5 6V6l-8.5 6z"/></svg></span>IND</span>
+                        <span class="text-3xl md:text-5xl lg:text-6xl tracking-widest text-white uppercase whitespace-nowrap drop-shadow-2xl" style="font-family: 'Anton', sans-serif; text-shadow: 0px 4px 25px rgba(0,0,0,1), 0px 0px 10px rgba(0,0,0,1);">LA SÉRIE D'HORREUR IMMERSIVE</span>
+                    </h1>
 
-                    <p class="text-white/80 max-w-xl text-lg md:text-xl font-light leading-relaxed mt-2">
+                    <p class="text-white max-w-xl text-lg md:text-xl font-medium leading-relaxed mt-2" style="text-shadow: 0px 2px 10px rgba(0,0,0,1), 0px 0px 5px rgba(0,0,0,0.8);">
 
                         Cinq étudiants. Une nuit. Une mystèrieuse cassette. Découvrez les images qui ont mené à la classification du dossier Blackwood.
 
@@ -1091,7 +1184,7 @@
 
                         <h2 class="text-5xl font-bold tracking-widest text-white/80 uppercase italic terminal relative z-10">
 
-                            <span class="absolute -top-16 -left-4 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none not-italic select-none">ARCHIVE</span>
+                            <span class="absolute -top-16 -left-4 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none not-italic select-none">ARCHIVES</span>
 
                             Résumé de la série
 
@@ -1139,8 +1232,6 @@
                                     <div class="tape-effect"></div>
                                     <div class="polaroid-img-container">
 
-                                        <!-- MODIFICATION ICI : Remplace la valeur du src par ton image -->
-
                                         <img src="Images/asile.webp" alt="Asile" class="w-full h-full object-cover grayscale opacity-80 contrast-125 sepia-[.5]">
 
                                     </div>
@@ -1186,17 +1277,17 @@
     </div>
     <div class="evidence-card" onclick="openItemDetail('item5')">
         <div class="evidence-tag">REF_005</div>
-        <div class="item-preview"><img src="Images/sac.webp" alt="Sac Explorateur" class="w-full h-full object-cover"></div>
+        <div class="item-preview"><img src="Images/sac.webp" alt="Sac Explorateur REWIND" class="w-full h-full object-cover"></div>
         <div class="item-info">
-            <span class="item-title">Sac Explorateur</span>
+            <span class="item-title">Sac Explorateur REWIND</span>
             <span class="item-price">55.00€</span>
         </div>
     </div>
     <div class="evidence-card" onclick="openItemDetail('item10')">
         <div class="evidence-tag">REF_010</div>
-        <div class="item-preview"><img src="Images/camescope.webp" alt="Camescope 83" class="w-full h-full object-cover"></div>
+        <div class="item-preview"><img src="Images/camescope.webp" alt="Camescope" class="w-full h-full object-cover"></div>
         <div class="item-info">
-            <span class="item-title">Camescope 83</span>
+            <span class="item-title">Camescope REWIND</span>
             <span class="item-price">120.00€</span>
         </div>
     </div>
@@ -1218,7 +1309,13 @@
 
         <!-- VUE DOSSIER (INTÉGRALE RESTAURÉE) -->
 
-        <div id="view-dossier" class="view space-y-12">
+        <div id="view-dossier" class="view space-y-12 max-w-6xl mx-auto p-6 md:p-12">
+
+            <div class="flex flex-col items-center gap-4 mb-20 text-center relative pt-8">
+                <h1 class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none select-none terminal uppercase whitespace-nowrap w-full text-center">SYNOPSIS REWIND</h1>
+                <h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest relative z-10">Archives</h2>
+                <p class="mono text-[10px] opacity-40 uppercase tracking-[0.4em]">DOCUMENT_DPJ // CONFIDENTIEL</p>
+            </div>
 
             <div class="paper-sheet max-w-4xl mx-auto p-12 md:p-20 text-[#1a1a1a]">
 
@@ -1254,11 +1351,12 @@
 
                         <div class="my-12">
 
-                            <div class="video-evidence aspect-video group" onclick="playCassette('Division_Police_Judiciaire', 'DOC_AUDIOVISUEL_REF_A')">
-
-                                <div class="absolute inset-0 bg-[#050505] flex items-center justify-center text-white/40 text-[10px] uppercase tracking-widest group-hover:text-white transition-all">Preuve Vidéo : BANDE_ANNONCE_RÉCUPÉRÉE</div>
-
-                            </div>
+                            <div class="video-evidence aspect-video group overflow-hidden" onclick="playCassette('Division_Police_Judiciaire', 'DOC_AUDIOVISUEL_REF_A')">
+    <!-- Image de fond -->
+    <img src="Images/BA.webp" alt="Preview" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-opacity duration-500">
+    
+    </div>
+</div>
 
                         </div>
 
@@ -1296,7 +1394,16 @@
 
                 </div>
 
-                <div class="mt-20 pt-12 border-t border-black/20 flex justify-center"><button onclick="showView('home')" class="btn-action !bg-black !text-white border-none">Fermer le Dossier</button></div>
+                <div class="text-center pb-20 flex flex-col md:flex-row justify-center items-center gap-6">
+
+                <button onclick="showView('home')" class="btn-action">Fermer le Dossier</button>
+
+                <a onclick="showView('cassettes')" class="btn-action !bg-[var(--accent)] !text-black hover:!bg-white hover:!border-white hover:!shadow-[0_0_30px_white] cursor-pointer">
+                VOIR LES CASSETTES
+                </a>
+
+            </div>
+                
 
             </div>
 
@@ -1306,9 +1413,13 @@
 
         <!-- VUE VICTIMES -->
 
-        <div id="view-victimes" class="view space-y-12">
+        <div id="view-victimes" class="view space-y-12 max-w-6xl mx-auto p-6 md:p-12">
 
-            <div class="flex flex-col items-center gap-4 mb-20 text-center"><h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest">Registre des Disparus</h2><p class="mono text-[10px] opacity-40 tracking-[0.4em]">TOTAL_2025 // RÉCUPÉRATION PHYSIQUE</p></div>
+            <div class="flex flex-col items-center gap-4 mb-20 text-center relative pt-8">
+                <h1 class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none select-none terminal uppercase whitespace-nowrap w-full text-center">PERSONNAGES REWIND</h1>
+                <h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest relative z-10">Registre des Disparus</h2>
+                <p class="mono text-[10px] opacity-40 tracking-[0.4em]">TOTAL_2025 // RÉCUPÉRATION PHYSIQUE</p>
+            </div>
 
             
 
@@ -1338,7 +1449,7 @@
 
                             <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Obsessionnel et manipulateur. Nathan est un perfectionniste qui voit le monde à travers un objectif. Sa peur de l’échec le pousse à ignorer les signaux d’alerte pour privilégier "l’image culte".</p></div>
 
-                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-nathan" class="censored">Nathan a trouvé la cassette 000 dans le bureau du directeur, scellée derrière une cloison qu’il a lui-même brisée pour "créer une mise en scène". Il l’a saisit et est tombé raide mort devant la caméra.</span></p></div>
+                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-nathan" class="censored">Nathan a trouvé la cassette 000 dans le bureau du directeur, scellée derrière une cloison qu’il a lui-même brisée pour "créer une mise en scène". Il l’a saisie et est tombé raide mort devant la caméra.</span></p></div>
 
                         </div>
 
@@ -1370,9 +1481,9 @@
 
                             <div class="report-section"><span class="report-label">Description Physique</span><p>Lunettes à monture fine, cheveux attachés. Style utilitaire. On la voit souvent entourée de câbles et de piles de documents poussiéreux.</p></div>
 
-                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>AAnalytique et sceptique. Laura refuse de croire au surnaturel, cherchant désespérément une logique historique. Cette rigidité mentale devient sa propre prison face à l'impossible.</p></div>
+                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Analytique et sceptique. Laura refuse de croire au surnaturel, cherchant désespérément une logique historique. Cette rigidité mentale devient sa propre prison face à l'impossible.</p></div>
 
-                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-laura" class="censored">Elle a déterré la cassette au fond d'un carton d'archives médicales. En lisant l'étiquette, elle réalise que l'écriture est la sienne. Peu de temps après une forme est apparue à l’image, engloutissant Laura, la bande s’arrête ici.</span></p></div>
+                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-laura" class="censored">Elle a déterré la cassette au fond d'un carton d'archives médicales. En lisant l'étiquette, elle réalise que l'écriture est la sienne. Peu de temps après, une forme est apparue à l’image, engloutissant Laura ; la bande s’arrête ici.</span></p></div>
 
                         </div>
 
@@ -1404,9 +1515,9 @@
 
                             <div class="report-section"><span class="report-label">Description Physique</span><p>Silhouette frêle, porte en permanence un casque audio imposant autour du cou. Son visage est marqué par une terreur qu'il ne cherche même plus à cacher.</p></div>
 
-                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>OEmpathique et paranoïaque. Sofiane ressent l'hostilité des lieux avant les autres. Son hypersensibilité auditive le rend vulnérable aux fréquences de l'hôpital.</p></div>
+                            <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Empathique et paranoïaque. Sofiane ressent l'hostilité des lieux avant les autres. Son hypersensibilité auditive le rend vulnérable aux fréquences de l'hôpital.</p></div>
 
-                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-sofiane" class="censored">Il a trouvé la cassette insérée dans un vieux magnétoscope qui tournait à vide dans une chambre d'isolement. C'est le bruit du rembobinage, capté par son micro, qui l'a guidé. Lorsqu’il l’a regardé, ses yeux se sont écarquillés, il se les ai arraché et est tombé mort.</span></p></div>
+                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-sofiane" class="censored">Il a trouvé la cassette insérée dans un vieux magnétoscope qui tournait à vide dans une chambre d'isolement. C'est le bruit du rembobinage, capté par son micro, qui l'a guidé. Lorsqu’il l’a regardée, ses yeux se sont écarquillés, il se les est arrachés et est tombé mort.</span></p></div>
 
                         </div>
 
@@ -1440,7 +1551,7 @@
 
                             <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Détachée et fatale. Eva semble avoir un lien préexistant avec l'hôpital. Son calme est troublant; elle semble vibrer en harmonie avec l’asile.</p></div>
 
-                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-eva" class="censored">Elle a trouvé la cassette posée sur un plateau de soins, bien en évidence, comme si elle l'attendait. Elle l’a ramassé sans surprise, l'embrassant presque, puis est partie en hurlant et en lâchant sa caméra. Les rushs s’arrêtent ici, sur un hurlement de mort.</span></p></div>
+                            <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-eva" class="censored">Elle a trouvé la cassette posée sur un plateau de soins, bien en évidence, comme si elle l'attendait. Elle l’a ramassée sans surprise, l'embrassant presque, puis est partie en hurlant et en lâchant sa caméra. Les rushs s’arrêtent ici, sur un hurlement de mort.</span></p></div>
 
                         </div>
 
@@ -1534,37 +1645,39 @@
 
         <!-- VUE CASSETTES -->
 
-        <div id="view-cassettes" class="view space-y-12">
+        <div id="view-cassettes" class="view space-y-12 max-w-6xl mx-auto p-6 md:p-12">
 
-            <div class="flex flex-col items-center gap-4 mb-20 text-center"><h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest">Rushs Récupérés</h2><p class="mono text-[10px] opacity-40 tracking-[0.4em]">SYNC_READY // OCT <span id="digit-4" class="glitch-digit">3</span></p></div>
-
-            
+            <div class="flex flex-col items-center gap-4 mb-20 text-center relative pt-8">
+                <h1 class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none select-none terminal uppercase whitespace-nowrap w-full text-center">ÉPISODES REWIND</h1>
+                <h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest relative z-10">Rushs Récupérés</h2>
+                <p class="mono text-[10px] opacity-40 tracking-[0.4em]">SYNC_READY // OCT <span id="digit-4" class="glitch-digit">3</span></p>
+            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 mb-20 px-4" id="tapes-grid">
 
-                <!-- CASSETTES MODIFIÉES : Ajout de vhs-hover-thumbnail et vhs-hover-title -->
+                <!-- CASSETTES MODIFIÉES : Ajout de vhs-hover-thumbnail et vhs-hover-title, et la balise vhs-hub -->
                 <div class="vhs-cassette" style="--char-color: var(--color-nathan);" onclick="playCassette('Nathan Dubois', 'NATHAN')">
-                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Nathan</span></div><div class="vhs-play-overlay">▶</div>
+                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"><div class="vhs-hub"></div></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"><div class="vhs-hub"></div></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Nathan</span></div><div class="vhs-play-overlay">▶</div>
                     <div class="vhs-hover-thumbnail" style="background-image: url('Images/001.webp');"><div class="vhs-hover-title">Episode : NATHAN</div></div>
                 </div>
 
                 <div class="vhs-cassette" style="--char-color: var(--color-laura);" onclick="playCassette('Laura Wagner', 'LAURA')">
-                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Laura</span></div><div class="vhs-play-overlay">▶</div>
+                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"><div class="vhs-hub"></div></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"><div class="vhs-hub"></div></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Laura</span></div><div class="vhs-play-overlay">▶</div>
                     <div class="vhs-hover-thumbnail" style="background-image: url('Images/002.webp');"><div class="vhs-hover-title">Episode : LAURA</div></div>
                 </div>
 
                 <div class="vhs-cassette" style="--char-color: var(--color-sofiane);" onclick="playCassette('Sofiane Belkacem', 'SOFIANE')">
-                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Sofiane</span></div><div class="vhs-play-overlay">▶</div>
+                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"><div class="vhs-hub"></div></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"><div class="vhs-hub"></div></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Sofiane</span></div><div class="vhs-play-overlay">▶</div>
                     <div class="vhs-hover-thumbnail" style="background-image: url('Images/003.webp');"><div class="vhs-hover-title">Episode : SOFIANE</div></div>
                 </div>
 
                 <div class="vhs-cassette" style="--char-color: var(--color-eva);" onclick="playCassette('Eva Vasquez', 'EVA')">
-                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Eva</span></div><div class="vhs-play-overlay">▶</div>
+                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"><div class="vhs-hub"></div></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"><div class="vhs-hub"></div></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Eva</span></div><div class="vhs-play-overlay">▶</div>
                     <div class="vhs-hover-thumbnail" style="background-image: url('Images/004.webp');"><div class="vhs-hover-title">Episode : EVA</div></div>
                 </div>
 
                 <div class="vhs-cassette" style="--char-color: var(--color-hugo);" onclick="playCassette('Hugo Moreau', 'HUGO')">
-                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Hugo</span></div><div class="vhs-play-overlay">▶</div>
+                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"><div class="vhs-hub"></div></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"><div class="vhs-hub"></div></div></div><div class="vhs-label-plate"><span class="vhs-label-text">Hugo</span></div><div class="vhs-play-overlay">▶</div>
                     <div class="vhs-hover-thumbnail" style="background-image: url('Images/005.webp');"><div class="vhs-hover-title">Episode : HUGO</div></div>
                 </div>
 
@@ -1598,7 +1711,7 @@
 
                 <div class="vhs-cassette damaged" id="tape-000" style="display: none;" onclick="playCassette('ORIGINE', 'CASSETTE 000 : LE GLITCH')">
 
-                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"></div></div>
+                    <div class="vhs-ribbed"></div><div class="vhs-window-unit win-left"><div class="vhs-reel"><div class="vhs-hub"></div></div></div><div class="vhs-window-unit win-right"><div class="vhs-reel"><div class="vhs-hub"></div></div></div>
 
                     <div class="vhs-label-plate"><span class="vhs-label-text">000</span></div>
 
@@ -1614,7 +1727,7 @@
 
                 <a href="#" class="btn-action !bg-[var(--accent)] !text-black hover:!bg-white hover:!border-white hover:!shadow-[0_0_30px_white]">
 
-                    VOIR SUR VISION+
+                    VOIR SUR VISION
 
                 </a>
 
@@ -1626,60 +1739,73 @@
 
         <!-- VUE SAISIES -->
 
-        <div id="view-saisies" class="view space-y-12">
+        <div id="view-saisies" class="view space-y-12 max-w-6xl mx-auto p-6 md:p-12">
 
-            <div class="flex flex-col items-center gap-4 mb-20 text-center"><h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest">Inventaire des Saisies</h2><p class="mono text-[10px] opacity-40 uppercase tracking-[0.5em]">Stockage // SÉCURITÉ NIV_4</p></div>
+            <div class="flex flex-col items-center gap-4 mb-10 text-center relative pt-8">
+                <h1 class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none select-none terminal uppercase whitespace-nowrap w-full text-center">BOUTIQUE REWIND</h1>
+                <h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest relative z-10">Inventaire des Saisies</h2>
+                <p class="mono text-[10px] opacity-40 uppercase tracking-[0.5em]">Stockage // SÉCURITÉ NIV_4</p>
+            </div>
 
+            <!-- FILTRES AJOUTÉS ICI -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="filter-btn active" onclick="filterSaisies('tout', this)">Tout</button>
+                <button class="filter-btn" onclick="filterSaisies('habits', this)">Habits</button>
+                <button class="filter-btn" onclick="filterSaisies('accessoires', this)">Accessoires</button>
+                <button class="filter-btn" onclick="filterSaisies('collector', this)">Collector</button>
+            </div>
+
+            <!-- AJOUT DES ATTRIBUTS data-category -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20 px-4 text-left">
-    <div class="evidence-card" onclick="openItemDetail('item1')">
+    <div class="evidence-card" data-category="habits" onclick="openItemDetail('item1')">
         <div class="evidence-tag">REF_001</div>
         <div class="item-preview"><img src="Images/tshirt.webp" alt="T-shirt Rewind" class="w-full h-full object-cover"></div>
         <div class="item-info"><span class="item-title">T-shirt Rewind</span><span class="item-price">25.00€</span></div>
     </div>
-    <div class="evidence-card" onclick="openItemDetail('item2')">
+    <div class="evidence-card" data-category="accessoires" onclick="openItemDetail('item2')">
         <div class="evidence-tag">REF_002</div>
         <div class="item-preview"><img src="Images/casquette.webp" alt="Casquette Rewind" class="w-full h-full object-cover"></div>
         <div class="item-info"><span class="item-title">Casquette Rewind</span><span class="item-price">20.00€</span></div>
     </div>
-    <div class="evidence-card" onclick="openItemDetail('item3')">
+    <div class="evidence-card" data-category="habits" onclick="openItemDetail('item3')">
         <div class="evidence-tag">REF_003</div>
         <div class="item-preview"><img src="Images/gilet.webp" alt="Gilet Rewind" class="w-full h-full object-cover"></div>
         <div class="item-info"><span class="item-title">Gilet Rewind</span><span class="item-price">45.00€</span></div>
     </div>
-    <div class="evidence-card" onclick="openItemDetail('item4')">
+    <div class="evidence-card" data-category="accessoires" onclick="openItemDetail('item4')">
         <div class="evidence-tag">REF_004</div>
         <div class="item-preview"><img src="Images/porte-cle.webp" alt="Porte-clé" class="w-full h-full object-cover"></div>
         <div class="item-info"><span class="item-title">Porte-clé rewind</span><span class="item-price">8.00€</span></div>
     </div>
-    <div class="evidence-card" onclick="openItemDetail('item5')">
+    <div class="evidence-card" data-category="accessoires" onclick="openItemDetail('item5')">
         <div class="evidence-tag">REF_005</div>
         <div class="item-preview"><img src="Images/sac.webp" alt="Sac Explorateur" class="w-full h-full object-cover"></div>
-        <div class="item-info"><span class="item-title">Sac Explorateur</span><span class="item-price">5<span id="code-2" class="glitch-digit">5</span>.00€</span></div>
+        <div class="item-info"><span class="item-title">Sac Explorateur REWIND</span><span class="item-price">5<span id="code-2" class="glitch-digit">5</span>.00€</span></div>
     </div>
-    <div class="evidence-card" onclick="openItemDetail('item6')">
+    <div class="evidence-card" data-category="habits" onclick="openItemDetail('item6')">
         <div class="evidence-tag">REF_006</div>
         <div class="item-preview"><img src="Images/hoody.webp" alt="Sweat hoody" class="w-full h-full object-cover"></div>
         <div class="item-info"><span class="item-title">Sweat hoody rewind</span><span class="item-price">40.00€</span></div>
     </div>
-    <div class="evidence-card" onclick="openItemDetail('item7')">
+    <div class="evidence-card" data-category="accessoires" onclick="openItemDetail('item7')">
         <div class="evidence-tag">REF_007</div>
         <div class="item-preview"><img src="Images/gourde.webp" alt="Gourde" class="w-full h-full object-cover"></div>
         <div class="item-info"><span class="item-title">Gourde rewind</span><span class="item-price">18.00€</span></div>
     </div>
-    <div class="evidence-card" onclick="openItemDetail('item8')">
+    <div class="evidence-card" data-category="accessoires" onclick="openItemDetail('item8')">
         <div class="evidence-tag">REF_008</div>
         <div class="item-preview"><img src="Images/carnet.webp" alt="Carnet" class="w-full h-full object-cover"></div>
         <div class="item-info"><span class="item-title">Carnet et stylo rewind</span><span class="item-price">15.00€</span></div>
     </div>
-    <div class="evidence-card" onclick="openItemDetail('item9')">
+    <div class="evidence-card" data-category="collector" onclick="openItemDetail('item9')">
         <div class="evidence-tag">REF_009</div>
         <div class="item-preview"><img src="Images/vhs-collector.webp" alt="VHS Collector" class="w-full h-full object-cover"></div>
-        <div class="item-info"><span class="item-title">VHS Collector</span><span class="item-price">35.00€</span></div>
+        <div class="item-info"><span class="item-title">VHS Collector REWIND</span><span class="item-price">35.00€</span></div>
     </div>
-    <div class="evidence-card" onclick="openItemDetail('item10')">
+    <div class="evidence-card" data-category="collector" onclick="openItemDetail('item10')">
         <div class="evidence-tag">REF_010</div>
         <div class="item-preview"><img src="Images/camescope.webp" alt="Camescope" class="w-full h-full object-cover"></div>
-        <div class="item-info"><span class="item-title">Camescope 83</span><span class="item-price">120.00€</span></div>
+        <div class="item-info"><span class="item-title">Camescope REWIND</span><span class="item-price">120.00€</span></div>
     </div>
 </div>
 
@@ -1691,14 +1817,12 @@
 
         <!-- VUE CONTACT -->
 
-        <div id="view-contact" class="view space-y-12">
+        <div id="view-contact" class="view space-y-12 max-w-6xl mx-auto p-6 md:p-12">
 
-            <div class="flex flex-col items-center gap-4 mb-20 text-center">
-
-                <h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest">Signalement</h2>
-
+            <div class="flex flex-col items-center gap-4 mb-20 text-center relative pt-8">
+                <h1 class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none select-none terminal uppercase whitespace-nowrap w-full text-center">CONTACT</h1>
+                <h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest relative z-10">Signalement</h2>
                 <p class="mono text-[10px] opacity-40 uppercase tracking-[0.4em]">Canal Sécurisé // Cryptage RSA-4096</p>
-
             </div>
 
             
@@ -1747,11 +1871,9 @@
 
         <div id="item-detail-view" class="fixed inset-0 z-[10000] bg-black/95 flex items-center justify-center hidden backdrop-blur-xl" onclick="closeItemDetail()">
 
-            <div class="detail-sheet" onclick="event.stopPropagation()"><div class="detail-visual"><div id="detail-icon"></div></div><div class="detail-content text-left"><div class="absolute top-4 right-4"><button onclick="closeItemDetail()" class="text-2xl hover:text-red-700">✕</button></div><h3 id="detail-title" class="detail-title"></h3><span id="detail-price" class="item-price text-xl text-[var(--accent)]"></span><p class="mt-4" id="detail-desc">Article saisi. Analyse de laboratoire en cours...</p><span id="detail-ref" class="hidden"></span><button class="btn-action mt-8 w-full" onclick="addToCart()">Ajouter au panier</button></div></div>
+            <div class="detail-sheet" onclick="event.stopPropagation()"><div class="detail-visual"><div id="detail-icon"></div></div><div class="detail-content text-left"><div class="absolute top-4 right-4"><button onclick="closeItemDetail()" class="text-2xl hover:text-red-700">✕</button></div><h3 id="detail-title" class="detail-title"></h3><span id="detail-price" class="item-price text-xl !text-[#8b0000]"></span><p class="mt-4" id="detail-desc">Article saisi. Analyse de laboratoire en cours...</p><span id="detail-ref" class="hidden"></span><button class="btn-action mt-8 w-full" onclick="addToCart()">Ajouter au panier</button></div></div>
 
         </div>
-
-
 
         <!-- PLAYER VIDEO STREAMING -->
 
@@ -1777,29 +1899,29 @@
 
                 <!-- Overlay Controls -->
 
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-6">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-6">
 
-                    <div class="flex justify-between items-start">
+                    <div class="flex justify-between items-start drop-shadow-2xl">
 
                         <div>
 
-                            <h3 id="player-title-stream" class="text-white font-bold text-xl tracking-wide font-sans">TITRE</h3>
+                            <h3 id="player-title-stream" class="text-white font-bold text-2xl tracking-wide font-sans drop-shadow-md" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">TITRE</h3>
 
-                            <p id="player-user-stream" class="text-white/60 text-xs font-mono">SOURCE: ARCHIVE</p>
+                            <p id="player-user-stream" class="text-white/90 text-sm font-mono drop-shadow-md mt-1" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">SOURCE: ARCHIVE</p>
 
                         </div>
 
-                        <div class="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">REC</div>
+                        <div class="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider shadow-[0_0_15px_rgba(220,38,38,0.8)]">REC</div>
 
                     </div>
 
                     <div class="space-y-4">
 
-                        <div class="w-full bg-white/20 h-1 rounded cursor-pointer relative group/progress">
+                        <div class="w-full bg-white/30 h-1.5 rounded cursor-pointer relative group/progress shadow-sm">
 
-                             <div id="stream-progress-bar" class="absolute top-0 left-0 h-full bg-[var(--accent)] w-0 transition-all duration-100 relative">
+                             <div id="stream-progress-bar" class="absolute top-0 left-0 h-full bg-[var(--accent)] w-0 transition-all duration-100 relative shadow-[0_0_10px_var(--accent)]">
 
-                                <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full scale-0 group-hover/progress:scale-100 transition-transform shadow-lg"></div>
+                                <div class="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full scale-0 group-hover/progress:scale-100 transition-transform shadow-lg"></div>
 
                              </div>
 
@@ -1809,19 +1931,19 @@
 
                             <div class="flex items-center gap-6">
 
-                                <button onclick="rewindTape()" class="hover:text-[var(--accent)] transition" title="Rembobiner">
+                                <button onclick="rewindTape()" class="hover:text-[var(--accent)] transition drop-shadow-md" title="Rembobiner">
 
                                     <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
 
                                 </button>
 
-                                <button id="btn-play-pause" onclick="togglePlay()" class="hover:text-[var(--accent)] transition">
+                                <button id="btn-play-pause" onclick="togglePlay()" class="hover:text-[var(--accent)] transition drop-shadow-md">
 
                                     <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
 
                                 </button>
 
-                                <div class="font-mono text-sm opacity-80"><span id="current-time">00:00</span> / <span id="total-time">04:20</span></div>
+                                <div class="font-mono text-sm opacity-100 drop-shadow-md font-bold" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);"><span id="current-time">00:00</span> / <span id="total-time">04:20</span></div>
 
                             </div>
 
@@ -1850,6 +1972,16 @@
                 <div class="logo-heavy-glitch" style="font-size: 2.5rem; text-shadow: none;">RE<span class="rewind-logo-w">W<svg class="rewind-logo-triangles" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 12l8.5 6V6l-8.5 6zm-9 0l8.5 6V6l-8.5 6z"/></svg></span>IND</div>
 
                 <div class="mono text-xs text-white uppercase tracking-[0.2em]">© 1983-2025 BUREAU DES ARCHIVES</div>
+                
+                <!-- Réseaux Sociaux -->
+                <div class="flex gap-4 pt-2">
+                    <a href="#" class="text-white/60 hover:text-[var(--accent)] transition-colors" title="Instagram" target="_blank">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                    <a href="#" class="text-white/60 hover:text-[var(--accent)] transition-colors" title="TikTok" target="_blank">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
+                    </a>
+                </div>
 
             </div>
 
@@ -1901,7 +2033,7 @@
 
                     <div class="w-3 h-3 rounded-full bg-red-600 animate-pulse"></div>
 
-                    <span class="font-black tracking-tighter italic group-hover:scale-105 transition-transform" style="font-family: 'Inter';">VISION+</span>
+                    <span class="font-black tracking-tighter italic group-hover:scale-105 transition-transform" style="font-family: 'Inter';">VISION</span>
 
                 </a>
 
@@ -2028,12 +2160,12 @@
     item2: { ref: "REF_002", title: "Casquette Rewind", price: "20.00€", icon: "Images/casquette.webp", desc: "Modèle ajustable, broderie haute densité 'REWIND' sur le front." },
     item3: { ref: "REF_003", title: "Gilet Rewind", price: "45.00€", icon: "Images/gilet.webp", desc: "Gilet tactique d'exploration multi-poches. Utilisé pour transporter les caméras à cassettes." },
     item4: { ref: "REF_004", title: "Porte-clé rewind", price: "8.00€", icon: "Images/porte-cle.webp", desc: "Miniature VHS en métal chromé. Une pièce de collection robuste." },
-    item5: { ref: "REF_005", title: "Sac Explorateur", price: "55.00€", icon: "Images/sac.webp", desc: "Étanche, protection caméras incluse. Retrouvé vide près de l'entrée de l'aile Nord." },
+    item5: { ref: "REF_005", title: "Sac Explorateur REWIND", price: "55.00€", icon: "Images/sac.webp", desc: "Étanche, protection caméras incluse. Retrouvé vide près de l'entrée de l'aile Nord." },
     item6: { ref: "REF_006", title: "Sweat hoody rewind", price: "40.00€", icon: "Images/hoody.webp", desc: "Coton lourd, logo réfléchissant pour les interventions de nuit." },
     item7: { ref: "REF_007", title: "Gourde rewind", price: "18.00€", icon: "Images/gourde.webp", desc: "Acier inoxydable 750ml. Inscription 'BUREAU DES ARCHIVES' gravée." },
     item8: { ref: "REF_008", title: "Carnet et stylo rewind", price: "15.00€", icon: "Images/carnet.webp", desc: "Papier recyclé, stylo logotypé. Idéal pour noter les relevés paranormaux." },
-    item9: { ref: "REF_009", title: "VHS Collector", price: "35.00€", icon: "Images/vhs-collector.webp", desc: "Édition limitée scellée sous vide. Contient des rushs exclusifs." },
-    item10: { ref: "REF_010", title: "Camescope 83", price: "120.00€", icon: "Images/camescope.webp", desc: "Modèle authentique révisé 1983. Vendu comme pièce historique." }
+    item9: { ref: "REF_009", title: "VHS Collector REWIND", price: "35.00€", icon: "Images/vhs-collector.webp", desc: "Édition limitée scellée sous vide. Contient des rushs exclusifs." },
+    item10: { ref: "REF_010", title: "Camescope REWIND", price: "120.00€", icon: "Images/camescope.webp", desc: "Modèle authentique révisé 1983. Vendu comme pièce historique." }
 };
 
 
@@ -2434,6 +2566,22 @@
 
         }
 
+        // Script pour filtrer les objets de saisies
+        function filterSaisies(category, btnElement) {
+            // Mise à jour de l'état du bouton
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // Filtrage des éléments
+            const cards = document.querySelectorAll('#view-saisies .evidence-card');
+            cards.forEach(card => {
+                if (category === 'tout' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
     </script>
 
 </body>
