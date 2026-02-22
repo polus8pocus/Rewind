@@ -7,7 +7,9 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>REWIND | SYSTÈME DÉGRADÉ_v5.0.corrupt</title>
+    <title>REWIND | Archives scellées</title>
+
+    <link rel="icon" type="image/x-icon" href="Images/favicon.ico">
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -1002,9 +1004,9 @@
 
             <div class="text-xs opacity-80 mt-1">
 
-                <span id="notif-message-text">Données déverrouillées : </span>
+                <span id="notif-message-text">Nouveau Dossier : </span>
 
-                <span id="notif-person" class="font-bold">ADMIN</span>
+                <span id="notif-person" class="font-bold">VITIMES · ADMIN</span>
 
             </div>
 
@@ -1052,7 +1054,7 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5 10v4a2 2 0 002 2h2l4 4V4L9 8H7a2 2 0 00-2 2z"></path></svg>
                 </button>
 
-                <div class="cursor-pointer group relative" onclick="showView('saisies')">
+                <div class="cursor-pointer group relative" onclick="toggleCart()">
 
                     <svg class="w-6 h-6 text-white/40 group-hover:text-[var(--accent)] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 
@@ -1082,31 +1084,24 @@
 
         </div>
 
-
-
-        <!-- Overlay Menu Mobile -->
-
-        <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[999] flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300">
-
-            <nav class="flex flex-col gap-8 text-center text-2xl">
-
-                <a onclick="showView('dossier'); toggleMobileMenu()" class="nav-link nav-item-dossier">Dossiers</a>
-
-                <a onclick="showView('victimes'); toggleMobileMenu()" class="nav-link nav-item-victimes">Victimes</a>
-
-                <a onclick="showView('cassettes'); toggleMobileMenu()" class="nav-link nav-item-cassettes">Cassettes</a>
-
-                <a onclick="showView('saisies'); toggleMobileMenu()" class="nav-link nav-item-saisies">Saisies</a>
-
-                <a onclick="showView('contact'); toggleMobileMenu()" class="nav-link nav-item-contact">Contact</a>
-
-            </nav>
-
-        </div>
-
     </header>
 
-
+    <!-- Overlay Menu Mobile Plein Écran -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#030405] z-[50000] flex flex-col items-center justify-center opacity-0 pointer-events-none transition-all duration-300 scale-95">
+        <!-- Bouton Fermer -->
+        <button onclick="toggleMobileMenu()" class="absolute top-8 right-8 text-white/50 hover:text-white transition-colors">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        
+        <nav class="flex flex-col gap-10 text-center text-3xl md:text-4xl font-bold uppercase tracking-widest terminal">
+            <a onclick="showView('home'); toggleMobileMenu()" class="nav-link nav-item-home hover:text-[var(--accent)]">Accueil</a>
+            <a onclick="showView('dossier'); toggleMobileMenu()" class="nav-link nav-item-dossier hover:text-[var(--accent)]">Dossiers</a>
+            <a onclick="showView('victimes'); toggleMobileMenu()" class="nav-link nav-item-victimes hover:text-[var(--accent)]">Victimes</a>
+            <a onclick="showView('cassettes'); toggleMobileMenu()" class="nav-link nav-item-cassettes hover:text-[var(--accent)]">Cassettes</a>
+            <a onclick="showView('saisies'); toggleMobileMenu()" class="nav-link nav-item-saisies hover:text-[var(--accent)]">Saisies</a>
+            <a onclick="showView('contact'); toggleMobileMenu()" class="nav-link nav-item-contact hover:text-[var(--accent)]">Contact</a>
+        </nav>
+    </div>
 
     <main class="w-full relative z-10 text-left">
 
@@ -1144,6 +1139,7 @@
                     <span class="bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.5)]">Bande Annonce Officielle</span>
 
                     
+
                     <!-- H1 Modifié ici -->
                     <h1 class="logo-heavy-glitch flex flex-col items-start gap-2" style="font-size: clamp(4rem, 10vw, 8rem); line-height: 1;">
                         <span>RE<span class="rewind-logo-w">W<svg class="rewind-logo-triangles" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 12l8.5 6V6l-8.5 6zm-9 0l8.5 6V6l-8.5 6z"/></svg></span>IND</span>
@@ -1314,7 +1310,11 @@
             <div class="flex flex-col items-center gap-4 mb-20 text-center relative pt-8">
                 <h1 class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none select-none terminal uppercase whitespace-nowrap w-full text-center">SYNOPSIS REWIND</h1>
                 <h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest relative z-10">Archives</h2>
-                <p class="mono text-[10px] opacity-40 uppercase tracking-[0.4em]">DOCUMENT_DPJ // CONFIDENTIEL</p>
+                <div class="inline-block bg-[#050505] border border-red-500/50 px-6 py-2 relative shadow-[0_0_15px_rgba(239,68,68,0.2)] z-10 mt-4 animate-pulse">
+                    <div class="absolute left-0 top-0 w-1 h-full bg-red-600"></div>
+                    <h3 class="text-xs md:text-sm font-mono text-red-500 tracking-[0.2em] uppercase">> Un hôpital psychiatrique abandonné et une cassette introuvable<span class="animate-pulse text-red-600 ml-1">_</span></h3>
+                </div>
+                <p class="mono text-[10px] opacity-40 uppercase tracking-[0.4em] mt-4">DOCUMENT_DPJ // CONFIDENTIEL</p>
             </div>
 
             <div class="paper-sheet max-w-4xl mx-auto p-12 md:p-20 text-[#1a1a1a]">
@@ -1351,10 +1351,16 @@
 
                         <div class="my-12">
 
-                            <div class="video-evidence aspect-video group overflow-hidden" onclick="playCassette('Division_Police_Judiciaire', 'DOC_AUDIOVISUEL_REF_A')">
-    <!-- Image de fond -->
-    <img src="Images/BA.webp" alt="Preview" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-opacity duration-500">
+                            <div class="video-evidence aspect-video group overflow-hidden relative" onclick="playCassette('Division_Police_Judiciaire', 'DOC_AUDIOVISUEL_REF_A')">
+    <!-- Image de fond (opacity-80 au lieu de 50 pour plus de clarté) -->
+    <img src="Images/BA.webp" alt="Preview" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500">
     
+    <!-- Bouton Play ajouté pour inciter au clic -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+        <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-black/60 border-2 border-[var(--accent)] flex items-center justify-center backdrop-blur-sm group-hover:scale-110 group-hover:bg-[var(--accent)] group-hover:text-black transition-all duration-300 text-[var(--accent)] shadow-[0_0_15px_rgba(57,255,20,0.3)] group-hover:shadow-[0_0_30px_rgba(57,255,20,0.8)]">
+            <svg class="w-8 h-8 md:w-10 md:h-10 fill-current ml-1" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+    </div>
     </div>
 </div>
 
@@ -1393,8 +1399,7 @@
                     </div>
 
                 </div>
-
-                <div class="text-center pb-20 flex flex-col md:flex-row justify-center items-center gap-6">
+                <div class="text-center pb-20 flex flex-col md:flex-row justify-center items-center gap-6 mt-16">
 
                 <button onclick="showView('home')" class="btn-action">Fermer le Dossier</button>
 
@@ -1418,7 +1423,11 @@
             <div class="flex flex-col items-center gap-4 mb-20 text-center relative pt-8">
                 <h1 class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none select-none terminal uppercase whitespace-nowrap w-full text-center">PERSONNAGES REWIND</h1>
                 <h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest relative z-10">Registre des Disparus</h2>
-                <p class="mono text-[10px] opacity-40 tracking-[0.4em]">TOTAL_2025 // RÉCUPÉRATION PHYSIQUE</p>
+                <div class="inline-block bg-[#050505] border border-red-500/50 px-6 py-2 relative shadow-[0_0_15px_rgba(239,68,68,0.2)] z-10 mt-4 animate-pulse">
+                    <div class="absolute left-0 top-0 w-1 h-full bg-red-600"></div>
+                    <h3 class="text-xs md:text-sm font-mono text-red-500 tracking-[0.2em] uppercase">> Des disparitions inexpliquées<span class="animate-pulse text-red-600 ml-1">_</span></h3>
+                </div>
+                <p class="mono text-[10px] opacity-40 tracking-[0.4em] mt-4">TOTAL_2025 // RÉCUPÉRATION PHYSIQUE</p>
             </div>
 
             
@@ -1450,6 +1459,7 @@
                             <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Obsessionnel et manipulateur. Nathan est un perfectionniste qui voit le monde à travers un objectif. Sa peur de l’échec le pousse à ignorer les signaux d’alerte pour privilégier "l’image culte".</p></div>
 
                             <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-nathan" class="censored">Nathan a trouvé la cassette 000 dans le bureau du directeur, scellée derrière une cloison qu’il a lui-même brisée pour "créer une mise en scène". Il l’a saisie et est tombé raide mort devant la caméra.</span></p></div>
+                            <button onclick="showView('cassettes')" class="btn-action w-full mt-4 text-xs font-bold flex items-center justify-center gap-2">📼 CONSULTER LA CASSETTE</button>
 
                         </div>
 
@@ -1484,6 +1494,7 @@
                             <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Analytique et sceptique. Laura refuse de croire au surnaturel, cherchant désespérément une logique historique. Cette rigidité mentale devient sa propre prison face à l'impossible.</p></div>
 
                             <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-laura" class="censored">Elle a déterré la cassette au fond d'un carton d'archives médicales. En lisant l'étiquette, elle réalise que l'écriture est la sienne. Peu de temps après, une forme est apparue à l’image, engloutissant Laura ; la bande s’arrête ici.</span></p></div>
+                            <button onclick="showView('cassettes')" class="btn-action w-full mt-4 text-xs font-bold flex items-center justify-center gap-2">📼 CONSULTER LA CASSETTE</button>
 
                         </div>
 
@@ -1518,6 +1529,7 @@
                             <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Empathique et paranoïaque. Sofiane ressent l'hostilité des lieux avant les autres. Son hypersensibilité auditive le rend vulnérable aux fréquences de l'hôpital.</p></div>
 
                             <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-sofiane" class="censored">Il a trouvé la cassette insérée dans un vieux magnétoscope qui tournait à vide dans une chambre d'isolement. C'est le bruit du rembobinage, capté par son micro, qui l'a guidé. Lorsqu’il l’a regardée, ses yeux se sont écarquillés, il se les est arrachés et est tombé mort.</span></p></div>
+                            <button onclick="showView('cassettes')" class="btn-action w-full mt-4 text-xs font-bold flex items-center justify-center gap-2">📼 CONSULTER LA CASSETTE</button>
 
                         </div>
 
@@ -1552,6 +1564,7 @@
                             <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Détachée et fatale. Eva semble avoir un lien préexistant avec l'hôpital. Son calme est troublant; elle semble vibrer en harmonie avec l’asile.</p></div>
 
                             <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-eva" class="censored">Elle a trouvé la cassette posée sur un plateau de soins, bien en évidence, comme si elle l'attendait. Elle l’a ramassée sans surprise, l'embrassant presque, puis est partie en hurlant et en lâchant sa caméra. Les rushs s’arrêtent ici, sur un hurlement de mort.</span></p></div>
+                            <button onclick="showView('cassettes')" class="btn-action w-full mt-4 text-xs font-bold flex items-center justify-center gap-2">📼 CONSULTER LA CASSETTE</button>
 
                         </div>
 
@@ -1586,6 +1599,7 @@
                             <div class="report-section"><span class="report-label">Traits Caractériels</span><p>Pragmatique et protecteur. Hugo est le dernier rempart du groupe. Son instinct de survie est fort, mais sa loyauté envers ses amis le pousse à commettre des erreurs.</p></div>
 
                             <div class="report-section"><span class="report-label">Note d'Investigation</span><p class="handwritten"><span id="note-hugo" class="censored">Hugo a trouvé la cassette dans la sacoche abandonnée de Nathan, au milieu d'un couloir vide. En voulant comprendre ce qui est arrivé à son ami, il l'a inséré dans son lecteur portable. Après avoir posé la caméra, il a couru et a sauté par la fenêtre du 3e étage.</span></p></div>
+                            <button onclick="showView('cassettes')" class="btn-action w-full mt-4 text-xs font-bold flex items-center justify-center gap-2">📼 CONSULTER LA CASSETTE</button>
 
                         </div>
 
@@ -1623,7 +1637,10 @@
 
                                 3. <span class="font-black underline text-red-700">ACCUEIL</span> <span class="censored">INITIALISATION</span> <br>
 
-                                4. <span class="font-black underline text-red-700">DOSSIER</span> <span class="censored">LECTURE_FINALE</span>
+                                4. <span class="font-black underline text-red-700">DOSSIER</span> <span class="censored">LECTURE_FINALE</span> <br>
+
+                                5. <span class="font-black underline text-red-700">CODE CASSETTES</span> <span class="censored">LECTURE_FINALE</span>
+
 
                             </p>
 
@@ -1650,7 +1667,11 @@
             <div class="flex flex-col items-center gap-4 mb-20 text-center relative pt-8">
                 <h1 class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none select-none terminal uppercase whitespace-nowrap w-full text-center">ÉPISODES REWIND</h1>
                 <h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest relative z-10">Rushs Récupérés</h2>
-                <p class="mono text-[10px] opacity-40 tracking-[0.4em]">SYNC_READY // OCT <span id="digit-4" class="glitch-digit">3</span></p>
+                <div id="cassettes-box" class="inline-block bg-[#050505] border border-red-500/50 px-6 py-2 relative shadow-[0_0_15px_rgba(239,68,68,0.2)] z-10 mt-4 transition-all duration-500 animate-pulse">
+                    <div id="cassettes-bar" class="absolute left-0 top-0 w-1 h-full bg-red-600 transition-colors duration-500"></div>
+                    <h3 id="cassettes-subtitle" class="text-xs md:text-sm font-mono text-red-500 tracking-[0.2em] uppercase transition-colors duration-500">> <span id="cam-count">5</span> caméras, <span id="pov-count">5</span> points de vue, l'ordre de votre choix<span id="cassettes-cursor" class="animate-pulse text-red-600 ml-1 transition-colors duration-500">_</span></h3>
+                </div>
+                <p class="mono text-[10px] opacity-40 tracking-[0.4em] mt-4">SYNC_READY // OCT <span id="digit-4" class="glitch-digit">3</span></p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 mb-20 px-4" id="tapes-grid">
@@ -1744,7 +1765,11 @@
             <div class="flex flex-col items-center gap-4 mb-10 text-center relative pt-8">
                 <h1 class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl md:text-8xl text-white/10 z-[-1] tracking-widest pointer-events-none select-none terminal uppercase whitespace-nowrap w-full text-center">BOUTIQUE REWIND</h1>
                 <h2 class="text-5xl terminal text-[var(--accent)] uppercase tracking-widest relative z-10">Inventaire des Saisies</h2>
-                <p class="mono text-[10px] opacity-40 uppercase tracking-[0.5em]">Stockage // SÉCURITÉ NIV_4</p>
+                <div class="inline-block bg-[#050505] border border-red-500/50 px-6 py-2 relative shadow-[0_0_15px_rgba(239,68,68,0.2)] z-10 mt-4 animate-pulse">
+                    <div class="absolute left-0 top-0 w-1 h-full bg-red-600"></div>
+                    <h3 class="text-xs md:text-sm font-mono text-red-500 tracking-[0.2em] uppercase">> Vous aussi menez votre enquête<span class="animate-pulse text-red-600 ml-1">_</span></h3>
+                </div>
+                <p class="mono text-[10px] opacity-40 uppercase tracking-[0.5em] mt-4">Stockage // SÉCURITÉ NIV_4</p>
             </div>
 
             <!-- FILTRES AJOUTÉS ICI -->
@@ -1861,7 +1886,7 @@
 
             </div>
 
-             <div class="text-center pb-40"><button onclick="showView('home')" class="btn-action">Retour Base</button></div>
+             <div class="text-center pb-40"><button onclick="showView('home')" class="btn-action">Retour Accueil</button></div>
 
         </div>
 
@@ -1873,6 +1898,24 @@
 
             <div class="detail-sheet" onclick="event.stopPropagation()"><div class="detail-visual"><div id="detail-icon"></div></div><div class="detail-content text-left"><div class="absolute top-4 right-4"><button onclick="closeItemDetail()" class="text-2xl hover:text-red-700">✕</button></div><h3 id="detail-title" class="detail-title"></h3><span id="detail-price" class="item-price text-xl !text-[#8b0000]"></span><p class="mt-4" id="detail-desc">Article saisi. Analyse de laboratoire en cours...</p><span id="detail-ref" class="hidden"></span><button class="btn-action mt-8 w-full" onclick="addToCart()">Ajouter au panier</button></div></div>
 
+        </div>
+
+        <!-- PANIER (CART VIEW) -->
+        <div id="cart-view" class="fixed top-0 right-0 w-full max-w-md h-full bg-[#0a0c10]/98 backdrop-blur-xl border-l border-white/10 z-[20000] transform translate-x-full transition-transform duration-500 flex flex-col p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+                <h2 class="text-2xl terminal text-[var(--accent)] uppercase tracking-widest">Panier Saisies</h2>
+                <button onclick="toggleCart()" class="text-white/50 hover:text-red-500 text-2xl transition-colors">✕</button>
+            </div>
+            <div id="cart-items-list" class="flex-1 overflow-y-auto space-y-4 pr-2">
+                <p class="text-white/40 text-sm font-mono italic text-center mt-10">Aucune saisie sélectionnée.</p>
+            </div>
+            <div class="mt-6 pt-6 border-t border-white/10">
+                <div class="flex justify-between text-lg font-bold mb-6 font-mono text-white/90">
+                    <span>TOTAL :</span>
+                    <span id="cart-total" class="text-[var(--accent)]">0.00€</span>
+                </div>
+                <button onclick="validateCart()" class="btn-action w-full text-center">Valider la commande</button>
+            </div>
         </div>
 
         <!-- PLAYER VIDEO STREAMING -->
@@ -2171,50 +2214,47 @@
 
 
         const watchedTapes = new Set();
-
-        let cartCount = 0;
-
+        let cartItems = [];
+        let currentItemToBuy = null;
         let bonusUnlocked = false;
-
         let currentCodeInput = "";
-
         const correctCode = "2583";
-
         let isPlaying = false;
-
         let progressInterval;
-
-
+        
+        let notifTimeout; // Variable pour empêcher les conflits de timeout
 
         function showNotification(title, text, isAlert = false, name = "") {
-
             const notif = document.getElementById('sys-notification');
-
             if(!notif) return;
 
-            const titleEl = document.getElementById('notif-title');
+            clearTimeout(notifTimeout); // Nettoie le précédent timeout
 
+            const titleEl = document.getElementById('notif-title');
             if(titleEl) titleEl.textContent = title;
 
             const contentEl = document.getElementById('notif-message-text');
-
             if(contentEl) contentEl.textContent = text + (name ? " : " : "");
 
             const personSpan = document.getElementById('notif-person');
-
             if(personSpan) personSpan.textContent = name ? name.toUpperCase() : "ADMIN";
 
             notif.classList.toggle('alert', isAlert);
 
-            notif.classList.add('active');
-
-            setTimeout(() => { if(notif) notif.classList.remove('active'); }, 5000);
-
+            // On retire puis remet la classe pour relancer l'animation
+            notif.classList.remove('active');
+            
+            setTimeout(() => { 
+                notif.classList.add('active'); 
+                notifTimeout = setTimeout(() => { 
+                    if(notif) notif.classList.remove('active'); 
+                }, 5000); 
+            }, 50);
         }
 
 
 
-        function triggerGlobalGlitch() {
+        function triggerGlobalGlitch(nameToUnlock = null) {
 
             document.body.classList.add('page-glitch');
 
@@ -2237,6 +2277,13 @@
                 if(document.getElementById('code-3')) document.getElementById('code-3').classList.add('active');
 
                 if(document.getElementById('code-4')) document.getElementById('code-4').classList.add('active');
+                
+                // Si la 5ème cassette vient d'être visionnée, afficher l'alerte verte après 5.5s
+                if (nameToUnlock) {
+                    setTimeout(() => {
+                        showNotification("ACCÈS AUTORISÉ", `VICTIMES · Données décryptées`, false, nameToUnlock);
+                    }, 5500);
+                }
 
             }, 1500);
 
@@ -2260,11 +2307,15 @@
 
             togglePlay();
 
-
-
             if(['Nathan Dubois', 'Laura Wagner', 'Sofiane Belkacem', 'Eva Vasquez', 'Hugo Moreau'].includes(name)) {
-
-                watchedTapes.add(name);
+                
+                let isFifthTape = false;
+                if (!watchedTapes.has(name)) {
+                    watchedTapes.add(name);
+                    if (watchedTapes.size === 5 && !bonusUnlocked) {
+                        isFifthTape = true;
+                    }
+                }
 
                 const map = { 'Nathan Dubois': 'note-nathan', 'Laura Wagner': 'note-laura', 'Sofiane Belkacem': 'note-sofiane', 'Eva Vasquez': 'note-eva', 'Hugo Moreau': 'note-hugo' };
 
@@ -2273,12 +2324,16 @@
                 if(targetNote && !targetNote.classList.contains('revealed')) {
 
                     targetNote.classList.add('revealed');
+                    
+                    if (isFifthTape) {
+                        triggerGlobalGlitch(name); // Déclenche le glitch, l'alerte rouge, puis la verte
+                    } else {
+                        showNotification("ACCÈS AUTORISÉ", `VICTIMES · Données décryptées`, false, name);
+                    }
 
-                    showNotification("ACCÈS AUTORISÉ", `Données décryptées`, false, name);
-
+                } else if (isFifthTape) {
+                    triggerGlobalGlitch(); // Sécurité au cas où
                 }
-
-                if(watchedTapes.size === 5 && !bonusUnlocked) triggerGlobalGlitch();
 
             }
 
@@ -2357,7 +2412,6 @@
             player.classList.add('rewinding');
 
             
-
             const bar = document.getElementById('stream-progress-bar');
 
             const rewindInterval = setInterval(() => {
@@ -2379,7 +2433,6 @@
                 bar.style.width = w + '%';
 
                 
-
                 const totalSec = 260; 
 
                 const currentSec = Math.floor((w / 100) * totalSec);
@@ -2424,7 +2477,7 @@
 
                 setTimeout(() => {
 
-                    showNotification("ALERTE ARCHIVE", "Cryptage actif. Entrez le code.", true);
+                    showNotification("ALERTE ARCHIVE", "Cryptage actif. Entrez le code. CASSETTES · ", true);
 
                     const terminal = document.getElementById('vhs-unlock-terminal');
 
@@ -2460,6 +2513,21 @@
 
                     document.getElementById('tape-000').style.display = 'block';
 
+                    // Modification dynamique du titre h3
+                    const camCount = document.getElementById('cam-count');
+                    const povCount = document.getElementById('pov-count');
+                    const subtitle = document.getElementById('cassettes-subtitle');
+                    const box = document.getElementById('cassettes-box');
+                    const bar = document.getElementById('cassettes-bar');
+                    const cursor = document.getElementById('cassettes-cursor');
+                    
+                    if(camCount) camCount.textContent = '6';
+                    if(povCount) povCount.textContent = '6';
+                    if(subtitle) subtitle.classList.add('!text-red-500', 'drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]');
+                    if(box) box.classList.add('scale-105', '!border-red-500/50', 'animate-pulse');
+                    if(bar) bar.classList.add('!bg-red-500');
+                    if(cursor) cursor.classList.add('!text-red-500');
+
                 } else {
 
                     currentCodeInput = "";
@@ -2483,9 +2551,9 @@
         function closePlayer() { const v = document.getElementById('video-player-view'); if(v) { v.style.display = 'none'; resetPlayer(); } }
 
         
-
         function openItemDetail(itemId) { 
 
+            currentItemToBuy = itemId;
             const data = itemsData[itemId] || itemsData['item1']; 
 
             
@@ -2530,7 +2598,64 @@
 
         function closeItemDetail() { const i = document.getElementById('item-detail-view'); if(i) i.style.display = 'none'; }
 
-        function addToCart() { cartCount++; document.getElementById('cart-count').textContent = cartCount; closeItemDetail(); }
+        function addToCart() { 
+            if(!currentItemToBuy) return;
+            const item = itemsData[currentItemToBuy];
+            cartItems.push(item);
+            document.getElementById('cart-count').textContent = cartItems.length; 
+            showNotification("PANIER", item.title + " ajouté.", false);
+            renderCart();
+            closeItemDetail(); 
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-view').classList.toggle('translate-x-full');
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-list');
+            const totalEl = document.getElementById('cart-total');
+            container.innerHTML = '';
+            let total = 0;
+
+            if (cartItems.length === 0) {
+                container.innerHTML = '<p class="text-white/40 text-sm font-mono italic text-center mt-10">Aucune saisie sélectionnée.</p>';
+                totalEl.textContent = '0.00€';
+                return;
+            }
+
+            cartItems.forEach((item, index) => {
+                total += parseFloat(item.price);
+                container.innerHTML += `
+                    <div class="flex items-center gap-4 bg-white/5 p-3 border border-white/5 relative group">
+                        <div class="w-14 h-14 bg-black flex items-center justify-center border border-white/10 shrink-0">
+                            <img src="${item.icon}" class="max-h-full max-w-full object-contain">
+                        </div>
+                        <div class="flex-1 min-w-0 pr-8">
+                            <div class="font-bold text-xs text-white truncate font-mono uppercase">${item.title}</div>
+                            <div class="text-[var(--accent)] text-sm font-bold">${item.price}</div>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="absolute right-3 top-1/2 -translate-y-1/2 text-red-600 hover:text-red-400 p-2 text-xl font-bold transition-colors" title="Retirer">✕</button>
+                    </div>
+                `;
+            });
+            totalEl.textContent = total.toFixed(2) + '€';
+        }
+
+        function removeFromCart(index) {
+            cartItems.splice(index, 1);
+            document.getElementById('cart-count').textContent = cartItems.length;
+            renderCart();
+        }
+
+        function validateCart() {
+            if(cartItems.length === 0) return;
+            showNotification("TRANSACTION", "Panier validé. Transmission sécurisée en cours.", true);
+            cartItems = [];
+            document.getElementById('cart-count').textContent = '0';
+            renderCart();
+            toggleCart();
+        }
 
         function toggleFolder(id) { const f = document.getElementById('folder-' + id); if(!f) return; const active = f.classList.contains('active'); document.querySelectorAll('.victim-folder').forEach(v => v.classList.remove('active')); if(!active) f.classList.add('active'); }
 
@@ -2544,23 +2669,17 @@
 
             const menu = document.getElementById('mobile-menu');
 
-            const btnIcon = document.querySelector('#mobile-menu-btn svg');
-
             const isClosed = menu.classList.contains('pointer-events-none');
-
-
 
             if (isClosed) {
 
-                menu.classList.remove('opacity-0', 'pointer-events-none');
-
-                btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
+                menu.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+                menu.classList.add('opacity-100', 'scale-100');
 
             } else {
 
-                menu.classList.add('opacity-0', 'pointer-events-none');
-
-                btnIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
+                menu.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+                menu.classList.remove('opacity-100', 'scale-100');
 
             }
 
